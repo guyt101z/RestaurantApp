@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/blue_perf_repeat" >
 
     <include
         android:id="@+id/title"
-        layout="@layout/restaurant_logo" />
+        layout="@layout/restaurant_banner" />
 
     <TextView
         android:id="@+id/loginTitle"
@@ -13,10 +14,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/title"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="40dp"
         android:text="@string/account_log_in"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold" />
@@ -26,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/loginTitle"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:hint="@string/hint_email_address"
@@ -51,9 +53,11 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="20dp"
+        android:background="@drawable/btn_blue_selector"
         android:enabled="false"
         android:onClick="loginAction"
         android:text="@string/btn_log_in"
+        android:textColor="@color/button_text"
         android:textSize="22sp" />
 
 </RelativeLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" > 
+    <item>
+        <bitmap
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:src="@drawable/bg_blueperf"
+            android:tileMode="repeat" />
+    </item>
+    
+     <item>
+        <bitmap
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:src="@drawable/bg_grad"/>
+    </item>
+   
+</layer-list>

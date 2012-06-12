@@ -141,7 +141,7 @@ public class LoginActivity extends Activity implements CheckCredentialsListener 
 	}
 
 	void launchMain() {
-		Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = new Intent(this, TablesActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 		finish();

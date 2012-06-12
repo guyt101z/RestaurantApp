@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/actionBar"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/navbar"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/actionbarTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/action_bar_finish"
+            android:ellipsize="end"
+            android:lines="1"
+            android:paddingLeft="8dp"
+            android:singleLine="true"
+            android:text="@string/title_menu"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/action_bar_finish"
+            style="@style/HeaderButtonWhiteShadowText"
+            android:layout_width="72dp"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_action_bar"
+            android:gravity="center"
+            android:onClick="next"
+            android:text="@string/btn_finish" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/navbar" >
+
+        <EditText
+            android:id="@+id/filterText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/table_cell_textfield"
+            android:hint="@string/hint_filter_menu"
+            android:inputType="text|textFilter"
+            android:paddingLeft="10dp" />
+    </FrameLayout>
+
+    <ExpandableListView
+        android:id="@id/android:list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:cacheColorHint="@android:color/transparent"
+        android:groupIndicator="@drawable/expandable_list_group_indicator" >
+    </ExpandableListView>
+
+    <TextView
+        android:id="@id/android:empty"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/msg_empty_menu"
+        android:textSize="20dp"
+        android:visibility="gone" />
+
+</LinearLayout>
