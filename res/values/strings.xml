@@ -4,11 +4,25 @@
     <string name="hello">Hello World, RestaurantAppActivity!</string>
     <string name="app_name">RestaurantApp</string>
     <string name="account_log_in">Log into your Restaurant account: </string>
+    <string name="banner_descr">My Restaurant</string>
     <string name="btn_log_in">Log In</string>
+    <string name="btn_finish">Finish</string>
     <string name="hint_email_address">Email Address</string>
     <string name="hint_password">Password</string>
+    <string name="hint_filter_menu">Filter Menu</string>
+    <string name="msg_empty_menu">The menu is empty!</string>
     <string name="msg_invalid_credentials">CARFAX did not recognize this email and password. Please try again</string>
     <string name="msg_network_error">Whoops! Couldn\'t connect at this time. Please try again.</string>
-    <string name="progress_requesting">Requesting. Please wait...</string>
+    <string name="progress_requesting">Requesting. Please wait... </string>
+    <string name="table_1">1</string>
+    <string name="table_2">2</string>
+    <string name="table_3">3</string>
+    <string name="table_4">4</string>
+    <string name="table_5">5</string>
+    <string name="table_6">6</string>
+    <string name="table_7">7</string>
+    <string name="table_8">8</string>
+    <string name="table_9">9</string>
+    <string name="title_menu">Choose menu items</string>
 
 </resources>

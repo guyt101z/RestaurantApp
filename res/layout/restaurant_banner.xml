@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/carfax_logo"
+    android:id="@+id/restaurant_banner"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/navbar"
     android:padding="0px" >
 
-    <ProgressBar
-        android:id="@+id/logoProgressBar"
-        style="@android:style/Widget.ProgressBar.Small.Inverse"
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:indeterminate="true"
-        android:visibility="gone" />
+        android:layout_centerInParent="true"
+        android:src="@drawable/banner"
+        android:contentDescription="@string/banner_descr" />
 
 </RelativeLayout>
