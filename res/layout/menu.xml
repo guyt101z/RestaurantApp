@@ -13,6 +13,7 @@
 
         <TextView
             android:id="@+id/actionbarTitle"
+            style="@style/HeaderTitleWhiteShadowText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -22,9 +23,7 @@
             android:lines="1"
             android:paddingLeft="8dp"
             android:singleLine="true"
-            android:text="@string/title_menu"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:text="@string/title_menu" />
 
         <Button
             android:id="@+id/action_bar_finish"
@@ -34,8 +33,9 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/btn_action_bar"
+            android:enabled="false"
             android:gravity="center"
-            android:onClick="next"
+            android:onClick="finish"
             android:text="@string/btn_finish" />
     </RelativeLayout>
 
@@ -68,6 +68,7 @@
 
     <TextView
         android:id="@id/android:empty"
+        style="@style/GreyBoldShadowText"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="1"
