@@ -1,102 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tableLayout1"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_weight="1"
-    android:gravity="center_vertical" >
+    android:orientation="vertical" >
 
-    <TableRow
-        android:id="@+id/tableRow1"
+    <include
+        android:id="@+id/title"
+        layout="@layout/restaurant_banner" />
+
+    <TextView
+        android:id="@+id/tablesTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal" >
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/title_tables"
+        android:textAppearance="@style/GreyBoldShadowText"
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal" />
 
-        <Button
-            android:id="@+id/btn_table1"
-            android:layout_margin="5dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:onClick="goTo"
-            android:text="@string/table_1"
-            android:textColor="#FFFFFF" />
+    <TableLayout
+        android:id="@+id/tableLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:gravity="center_vertical" >
 
-        <Button
-            android:id="@+id/btn_table2"
-            android:layout_margin="5dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:onClick="goTo"
-            android:text="@string/table_2"
-            android:textColor="#FFFFFF" />
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal" >
 
-        <Button
-            android:id="@+id/btn_table3"
-            android:layout_margin="5dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:onClick="goTo"
-            android:text="@string/table_3"
-            android:textColor="#FFFFFF" />
-    </TableRow>
+            <Button
+                android:id="@+id/btn_table1"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_green_selector"
+                android:gravity="center_vertical|center_horizontal"
+                android:onClick="goTo"
+                android:text="@string/table_1"
+                android:textAppearance="@style/HeaderTitleWhiteShadowText"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/table_btn_text_size" />
 
-    <TableRow
-        android:id="@+id/tableRow2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal" >
+            <Button
+                android:id="@+id/btn_table2"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_green_selector"
+                android:gravity="center_vertical|center_horizontal"
+                android:onClick="goTo"
+                android:text="@string/table_2"
+                android:textAppearance="@style/HeaderTitleWhiteShadowText"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/table_btn_text_size" />
 
-        <Button
-            android:id="@+id/btn_table4"
-            android:layout_margin="5dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:onClick="goTo"
-            android:text="@string/table_4"
-            android:textColor="#FFFFFF" />
+            <Button
+                android:id="@+id/btn_table3"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_green_selector"
+                android:gravity="center_vertical|center_horizontal"
+                android:onClick="goTo"
+                android:text="@string/table_3"
+                android:textAppearance="@style/HeaderTitleWhiteShadowText"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/table_btn_text_size" />
+        </TableRow>
 
-        <Button
-            android:id="@+id/btn_table5"
-            android:layout_margin="5dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:onClick="goTo"
-            android:text="@string/table_5"
-            android:textColor="#FFFFFF" />
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal" >
 
-        <Button
-            android:id="@+id/btn_table6"
-            android:layout_margin="5dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:onClick="goTo"
-            android:text="@string/table_6"
-            android:textColor="#FFFFFF" />
-    </TableRow>
+            <Button
+                android:id="@+id/btn_table4"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_green_selector"
+                android:gravity="center_vertical|center_horizontal"
+                android:onClick="goTo"
+                android:text="@string/table_4"
+                android:textAppearance="@style/HeaderTitleWhiteShadowText"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/table_btn_text_size" />
 
-    <TableRow
-        android:id="@+id/tableRow3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal" >
+            <Button
+                android:id="@+id/btn_table5"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_green_selector"
+                android:gravity="center_vertical|center_horizontal"
+                android:onClick="goTo"
+                android:text="@string/table_5"
+                android:textAppearance="@style/HeaderTitleWhiteShadowText"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/table_btn_text_size" />
 
-        <Button
-            android:id="@+id/btn_table7"
-            android:layout_margin="5dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:onClick="goTo"
-            android:text="@string/table_7"
-            android:textColor="#FFFFFF" />
+            <Button
+                android:id="@+id/btn_table6"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_green_selector"
+                android:gravity="center_vertical|center_horizontal"
+                android:onClick="goTo"
+                android:text="@string/table_6"
+                android:textAppearance="@style/HeaderTitleWhiteShadowText"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/table_btn_text_size" />
+        </TableRow>
 
-        <Button
-            android:id="@+id/btn_table8"
-            android:layout_margin="5dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:onClick="goTo"
-            android:text="@string/table_8"
-            android:textColor="#FFFFFF" />
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal" >
 
-        <Button
-            android:id="@+id/btn_table9"
-            android:layout_margin="5dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:onClick="goTo"
-            android:text="@string/table_9"
-            android:textColor="#FFFFFF" />
-    </TableRow>
+            <Button
+                android:id="@+id/btn_table7"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_green_selector"
+                android:gravity="center_vertical|center_horizontal"
+                android:onClick="goTo"
+                android:text="@string/table_7"
+                android:textAppearance="@style/HeaderTitleWhiteShadowText"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/table_btn_text_size" />
 
-</TableLayout>
+            <Button
+                android:id="@+id/btn_table8"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_green_selector"
+                android:gravity="center_vertical|center_horizontal"
+                android:onClick="goTo"
+                android:text="@string/table_8"
+                android:textAppearance="@style/HeaderTitleWhiteShadowText"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/table_btn_text_size" />
+
+            <Button
+                android:id="@+id/btn_table9"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_green_selector"
+                android:gravity="center_vertical|center_horizontal"
+                android:onClick="goTo"
+                android:text="@string/table_9"
+                android:textAppearance="@style/HeaderTitleWhiteShadowText"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/table_btn_text_size" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>
