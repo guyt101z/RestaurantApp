@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello">Hello World, RestaurantAppActivity!</string>
-    <string name="app_name">RestaurantApp</string>
+    <string name="app_name">My Restaurant</string>
     <string name="account_log_in">Log into your Restaurant account: </string>
     <string name="banner_descr">My Restaurant</string>
     <string name="btn_log_in">Log In</string>
