@@ -1,24 +1,18 @@
 package ro.gdg.android.domain;
 
-
 public class UserLogin {
 
-	private AccountInfo accountInfo;
+	private String accountEmail;
 	private String password;
 
-	public UserLogin(AccountInfo accountInfo, String password) {
+	public UserLogin(String accountEmail, String password) {
 		super();
-		this.accountInfo = accountInfo;
+		this.accountEmail = accountEmail;
 		this.password = password;
 	}
 
-	public UserLogin(String user, String password) {
-		accountInfo = new AccountInfo(user);
-		this.password = password;
-	}
-
-	public AccountInfo getAccountInfo() {
-		return accountInfo;
+	public String getAccountEmail() {
+		return accountEmail;
 	}
 
 	public String getPassword() {
@@ -27,7 +21,7 @@ public class UserLogin {
 
 	@Override
 	public String toString() {
-		return "UserLogin [accountInfo=" + accountInfo + ", password="
+		return "UserLogin [accountEmail=" + accountEmail + ", password="
 				+ password + "]";
 	}
 

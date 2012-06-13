@@ -135,7 +135,7 @@ public class RestServiceClient implements SignHandler {
 			// the email should be combined with the timestamp with a colon
 			// character
 			String content = timestamp + ":"
-					+ userCredentials.getAccountInfo().getEmail();
+					+ userCredentials.getAccountEmail();
 			// the user's password should be uppercased, then hashed using
 			// SHA512 to
 			// produce the key : key = SHA512(PASSWORD)
@@ -144,7 +144,7 @@ public class RestServiceClient implements SignHandler {
 					Security.hashWithSHA512(userCredentials.getPassword()
 							.toUpperCase()));
 
-			return url + "email=" + userCredentials.getAccountInfo().getEmail()
+			return url + "email=" + userCredentials.getAccountEmail()
 					+ "&timestamp=" + timestamp + "&signature=" + signature;
 		} else {
 			return url;

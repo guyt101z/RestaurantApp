@@ -39,7 +39,7 @@ public class Settings {
 	public void setUserLogin(UserLogin userLogin) {
 		SharedPreferences.Editor spe = sharedPreferences.edit();
 		if (userLogin != null) {
-			spe.putString(KEY_EMAIL, userLogin.getAccountInfo().getEmail());
+			spe.putString(KEY_EMAIL, userLogin.getAccountEmail());
 			spe.putString(KEY_USER_PASSWORD, userLogin.getPassword());
 		} else {
 			spe.remove(KEY_USER_PASSWORD);

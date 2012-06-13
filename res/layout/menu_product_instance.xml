@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/x"
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/list_items_height"
+    android:background="@drawable/table_cell"
+    android:gravity="center_vertical"
+    android:paddingLeft="8dip"
+    android:paddingRight="8dip" >
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/product_generic"
+        android:contentDescription="@string/descr_product_icon" />
+
+    <TextView
+        android:id="@+id/priceCurrency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="2dp"
+        android:text="@string/currency_ron" />
+    
+    <TextView
+        android:id="@+id/priceValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/priceCurrency"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="6dp"/>
+
+    <TextView
+        android:id="@+id/productName"
+        style="@style/GroupChildTitleBlackShadowText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="4dp"
+        android:layout_toLeftOf="@id/priceValue"
+        android:layout_toRightOf="@id/icon"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="@string/random_long_string" />
+
+</RelativeLayout>
+

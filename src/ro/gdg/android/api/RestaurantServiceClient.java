@@ -1,6 +1,7 @@
 package ro.gdg.android.api;
 
 import ro.gdg.android.Settings;
+import ro.gdg.android.db.TableBillsHistory;
 import ro.gdg.android.domain.UserLogin;
 import ro.gdg.android.net.CheckCredentialsTask;
 import android.content.Context;
@@ -15,6 +16,7 @@ public class RestaurantServiceClient {
 	private static final String LAST_REPORTS_RECEIVED_TIME = "last_reports_received_time";
 	public static final long REQUEST_TIME_INTERVAL = 120000L;
 
+	private TableBillsHistory tableBillsHistory;
 	private RestServiceClient restServiceClient;
 	private long lastReportsReceivedTime;
 	private UserLogin userLogin;
@@ -30,6 +32,7 @@ public class RestaurantServiceClient {
 						LAST_REPORTS_RECEIVED_TIME, 0);
 
 		this.restServiceClient = new RestServiceClient();
+		tableBillsHistory = new TableBillsHistory(context);
 		settings = new Settings(context);
 
 		changeUser(Settings.getUserLogin(context));
@@ -37,6 +40,10 @@ public class RestaurantServiceClient {
 
 	public RestServiceClient getRestServiceClient() {
 		return restServiceClient;
+	}
+
+	public TableBillsHistory getTableBillsHistory() {
+		return tableBillsHistory;
 	}
 
 	public UserLogin getUserLogin() {
@@ -67,7 +74,7 @@ public class RestaurantServiceClient {
 		restServiceClient.setUserCredentials(userLogin);
 
 		if (userLogin != null) {
-			if (!userLogin.getAccountInfo().getEmail()
+			if (!userLogin.getAccountEmail()
 					.equalsIgnoreCase(settings.getEmail())) {
 				// syncReportsRun();
 			}

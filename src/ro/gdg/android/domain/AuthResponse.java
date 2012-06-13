@@ -6,7 +6,7 @@ public class AuthResponse extends RestaurantResponse {
 	public static final String AUTH_STATUS_OK = "OK";
 
 	private String authStatus;
-	private AccountInfo account;
+	private String accountEmail;
 
 	public String getAuthStatus() {
 		return authStatus;
@@ -16,18 +16,18 @@ public class AuthResponse extends RestaurantResponse {
 		this.authStatus = authStatus;
 	}
 
-	public AccountInfo getAccount() {
-		return account;
+	public String getAccount() {
+		return accountEmail;
 	}
 
-	public void setAccount(AccountInfo account) {
-		this.account = account;
+	public void setAccount(String accountEmail) {
+		this.accountEmail = accountEmail;
 	}
 
 	@Override
 	public String toString() {
-		return "AuthResponse [authStatus=" + authStatus + ", account="
-				+ account + "]";
+		return "AuthResponse [authStatus=" + authStatus + ", accountEmail="
+				+ accountEmail + "]";
 	}
 
 }
