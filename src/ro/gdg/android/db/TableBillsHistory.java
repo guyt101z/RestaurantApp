@@ -36,9 +36,7 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 
 		public static final String TABLE = "table_bill";
 
-		public static final String WAITER_EMAIL = "waiter_email"; // TODO : is
-																	// it
-																	// necessary?
+		public static final String WAITER_EMAIL = "waiter_email";
 		public static final String TABLE_NUMBER = "table_number";
 		public static final String DATE = "creation_time";
 
@@ -254,9 +252,7 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		return noOfTableBills;
 	}
 
-	public TableBill addTableBill(String waiter, int tableNumber) { // TODO
-																	// without
-																	// waiter?
+	public TableBill addTableBill(String waiter, int tableNumber) {
 		long creationDate = System.currentTimeMillis();
 
 		SQLiteDatabase db = this.getWritableDatabase();

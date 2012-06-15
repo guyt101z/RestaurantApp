@@ -28,6 +28,8 @@ public class TablesActivity extends Activity {
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivity(intent);
 		}
+
+		refreshTables();
 	}
 
 	// handles clicks on the dashboard buttons
@@ -75,5 +77,9 @@ public class TablesActivity extends Activity {
 		}
 		// i.putExtra(CategoryRecipesListActivity.SELECT_TAB_EXTRA, extra);
 		// startActivity(i);
+	}
+
+	private void refreshTables() {
+		// TODO Auto-generated method stub
 	}
 }
