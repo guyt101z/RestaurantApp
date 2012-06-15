@@ -16,10 +16,12 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import ro.gdg.android.domain.AuthResponse;
 import ro.gdg.android.domain.RestaurantResponse;
+import ro.gdg.android.domain.TableBillsResponse;
 import ro.gdg.android.domain.UserLogin;
 import ro.gdg.android.net.HttpRequestFactoryBuilder;
 import ro.gdg.android.net.SignHandler;
@@ -31,21 +33,13 @@ public class RestServiceClient implements SignHandler {
 	private static final String TAG = RestServiceClient.class.getSimpleName();
 
 	public static final String SERVER_ADDRESS = "10.0.2.2";
-	public static final String CREATE_ACCOUNT_URL = "http://m.carfax.com";
 	public static final String SERVER_API_URL = "http://" + SERVER_ADDRESS
-			+ ":8084/RestaurantWeb/";
+			+ ":8084/RestaurantWeb/mobileApi/";
 
 	// Check the user’s credentials, returns account info
 	public static final String REQUEST_AUTH = "check.jsp";
-	// Request a list of previously run reports
-	public static final String REQUEST_RUNNED_REPORTS = "organizer/reports-run.json";
-	// Get the HTML needed to display a report
-	public static final String REQUEST_VHR = "report.json";
-	// Decode a VIN and return a corresponding yearMakeModel
-	public static final String REQUEST_VIN_DECOCDE = "vin-decode.json";
-
-	// NEW TRAVELER API
-	public static final String REQUEST_LOOKUP = "vin-token/lookup.json";
+	// Request a list of previously created table bills
+	public static final String REQUEST_TABLE_BILLS = "tableBills.jsp";
 
 	@Deprecated
 	// Turn a license plate & state into a list of possible VIN matches
@@ -133,24 +127,67 @@ public class RestServiceClient implements SignHandler {
 		if (userCredentials != null) {
 			// the email should be combined with the timestamp with a colon
 			// character
-//			String content = timestamp + ":"
-//					+ userCredentials.getAccountEmail();
+			// String content = timestamp + ":"
+			// + userCredentials.getAccountEmail();
 			// the user's password should be uppercased, then hashed using
 			// SHA512 to
 			// produce the key : key = SHA512(PASSWORD)
 			// signature is computed as HMAC_SHA512(key, content)
-//			String signature = Security.hashHmacSHA512(content,
-//					Security.hashWithSHA512(userCredentials.getPassword()
-//							.toUpperCase()));
+			// String signature = Security.hashHmacSHA512(content,
+			// Security.hashWithSHA512(userCredentials.getPassword()
+			// .toUpperCase()));
 
-//			return url + "email=" + userCredentials.getAccountEmail()
-//					+ "&timestamp=" + timestamp + "&signature=" + signature;
-			
-			//TODO encrypt password
+			// return url + "email=" + userCredentials.getAccountEmail()
+			// + "&timestamp=" + timestamp + "&signature=" + signature;
+
+			// TODO encrypt password
 			return url + "email=" + userCredentials.getAccountEmail()
 					+ "&password=" + userCredentials.getPassword();
 		} else {
 			return url;
+		}
+	}
+
+	/**
+	 * Request a list of previously created table bills
+	 * 
+	 * @param email
+	 *            user's email
+	 * @param password
+	 *            user's password
+	 * @returns an object of type {@link TableBillsResponse} containing a list
+	 *          of previously created table bills
+	 */
+	public TableBillsResponse getTableBills(String email, String password) {
+		String url = SERVER_API_URL + REQUEST_TABLE_BILLS + "?";
+		Log.d(TAG, "getTableBills url : " + url);
+
+		try {
+			ResponseEntity<TableBillsResponse> responseEntity = getRestTemplate()
+					.exchange(url, HttpMethod.GET, requestEntity,
+							TableBillsResponse.class);
+			Log.d(TAG, "table bills response : " + responseEntity.getBody());
+			return responseEntity.getBody();
+		} catch (HttpClientErrorException e) {
+			Log.e(TAG, "table bills request failed", e);
+			Log.e(TAG, "status code: " + e.getStatusCode());
+			TableBillsResponse response = new TableBillsResponse();
+			if (HttpStatus.FORBIDDEN == e.getStatusCode()) {
+				response.setErrorCode(RestaurantResponse.INVALID_CREDENTIALS_ERROR_CODE);
+			} else {
+				response.setErrorCode(RestaurantResponse.NETWORK_ERROR_CODE);
+			}
+			return response;
+		} catch (HttpStatusCodeException e) {
+			Log.e(TAG, "table bills request failed", e);
+			TableBillsResponse response = new TableBillsResponse();
+			response.setErrorCode(RestaurantResponse.SERVER_ERROR_CODE);
+			return response;
+		} catch (Exception e) {
+			Log.e(TAG, "table bills request failed", e);
+			TableBillsResponse response = new TableBillsResponse();
+			response.setErrorCode(RestaurantResponse.NETWORK_ERROR_CODE);
+			return response;
 		}
 	}
 

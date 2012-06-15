@@ -26,6 +26,13 @@ public class ErrorHandler {
 								R.string.msg_invalid_credentials));
 
 				break;
+			case RestaurantResponse.SERVER_ERROR_CODE:
+				showToast(
+						activity,
+						activity.getBaseContext().getString(
+								R.string.msg_service_unavailable));
+
+				break;
 			default:
 				break;
 			}

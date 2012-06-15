@@ -1,8 +1,11 @@
 package ro.gdg.android.db;
 
 import java.lang.ref.WeakReference;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import ro.gdg.android.TablesActivity;
+import ro.gdg.android.domain.TBill;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -39,6 +42,7 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		public static final String WAITER_EMAIL = "waiter_email";
 		public static final String TABLE_NUMBER = "table_number";
 		public static final String DATE = "creation_time";
+		public static final String STATUS = "status";
 
 		public static final String SORT_DEFAULT = TableBill.DATE + " DESC";
 
@@ -46,16 +50,19 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		public String waiterEmail;
 		public int tableNumber;
 		public long date;
+		public int status;
 
 		private TableBill() {
 		}
 
-		public TableBill(long id, String waiterEmail, int tableNumber, long date) {
+		public TableBill(long id, String waiterEmail, int tableNumber,
+				long date, int status) {
 			super();
 			this.id = id;
 			this.waiterEmail = waiterEmail;
 			this.tableNumber = tableNumber;
 			this.date = date;
+			this.status = status;
 		}
 
 		public static TableBill readTableBill(Cursor cursor) {
@@ -67,6 +74,8 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 					.getColumnIndex(TableBill.TABLE_NUMBER));
 			tableBill.date = cursor.getLong(cursor
 					.getColumnIndex(TableBill.DATE));
+			tableBill.status = cursor.getInt(cursor
+					.getColumnIndex(TableBill.STATUS));
 			return tableBill;
 
 		}
@@ -206,7 +215,7 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		db.execSQL("CREATE TABLE " + TableBill.TABLE + " (" + TableBill._ID
 				+ " INTEGER PRIMARY KEY," + TableBill.WAITER_EMAIL + " STRING,"
 				+ TableBill.TABLE_NUMBER + " INTEGER," + TableBill.DATE
-				+ " LONG" + ");");
+				+ " LONG" + TableBill.STATUS + " INTEGER," + ");");
 
 		db.execSQL("CREATE TABLE " + ProductOrdered.TABLE + " ("
 				+ ProductOrdered._ID + " INTEGER PRIMARY KEY,"
@@ -252,7 +261,7 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		return noOfTableBills;
 	}
 
-	public TableBill addTableBill(String waiter, int tableNumber) {
+	public TableBill addTableBill(String waiter, int tableNumber, int status) {
 		long creationDate = System.currentTimeMillis();
 
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -263,10 +272,11 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		values.put(TableBill.WAITER_EMAIL, waiter);
 		values.put(TableBill.TABLE_NUMBER, tableNumber);
 		values.put(TableBill.DATE, creationDate);
+		values.put(TableBill.STATUS, status);
 		long id = db.insert(TableBill.TABLE, null, values);
 		if (id != -1) {
 			Log.i(TAG, "addTableBill successful");
-			bill = new TableBill(id, waiter, tableNumber, creationDate);
+			bill = new TableBill(id, waiter, tableNumber, creationDate, status);
 			count++;
 		} // else failure
 
@@ -283,33 +293,33 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		return count;
 	}
 
-	// public long replaceAllTableBills(TableBill[] billsList) {
-	// SQLiteDatabase db = this.getWritableDatabase();
-	// int count = db.delete(TableBill.TABLE, "1", null);
-	// Log.i(TAG, "deleteAllTableBills count:" + count);
-	//
-	// long noOfRecords = 0;
-	// ContentValues values = new ContentValues();
-	//
-	// for (int i = 0; i < billsList.length; i++) {
-	// values.put(TableBill.VIN, billsList[i].getVin());
-	// values.put(TableBill.YEAR_MAKE_MODEL,
-	// billsList[i].getYearMakeModel());
-	// try {
-	// values.put(TableBill.DATE,
-	// formatter.parse(billsList[i].getDate()).getTime());
-	// } catch (ParseException e) {
-	// Log.e("", "Parse exception: ", e);
-	// }
-	// if (db.insert(TableBill.TABLE, null, values) != -1) {
-	// noOfRecords++;
-	// }
-	// }
-	// Log.i(TAG, "addAllRecords count:" + noOfRecords);
-	//
-	// notifyChanges(noOfRecords);
-	// return noOfRecords;
-	// }
+	public long replaceAllTableBills(TBill[] billsList) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		int count = db.delete(TableBill.TABLE, "1", null);
+		Log.i(TAG, "deleteAllTableBills count:" + count);
+
+		long noOfRecords = 0;
+		ContentValues values = new ContentValues();
+
+		for (int i = 0; i < billsList.length; i++) {
+			values.put(TableBill.WAITER_EMAIL, billsList[i].getWaiterEmail());
+			values.put(TableBill.TABLE_NUMBER, billsList[i].getTableNumber());
+			try {
+				values.put(TableBill.DATE,
+						formatter.parse(billsList[i].getDate()).getTime());
+			} catch (ParseException e) {
+				Log.e("", "Parse exception: ", e);
+			}
+			values.put(TableBill.STATUS, billsList[i].getStatus());
+			if (db.insert(TableBill.TABLE, null, values) != -1) {
+				noOfRecords++;
+			}
+		}
+		Log.i(TAG, "addAllRecords count:" + noOfRecords);
+
+		notifyChanges(noOfRecords);
+		return noOfRecords;
+	}
 
 	// public boolean isInHistory(String vin) {
 	// boolean isInHistory;
@@ -321,6 +331,46 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 	// cursor.close();
 	// return isInHistory;
 	// }
+
+	public int getStateOfTable(String waiterEmail, int tableNo) {
+		String tNumber = tableNo + "";
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery("select " + TableBill.WAITER_EMAIL + ", "
+				+ TableBill.STATUS + " from " + TableBill.TABLE + " where "
+				+ TableBill.TABLE_NUMBER + "= ? order by " + TableBill.DATE
+				+ " DESC", new String[] { tNumber });
+
+		if (cursor.moveToFirst()) {
+			if (cursor.getInt(cursor.getColumnIndex(TableBill.STATUS)) == TBill.STATUS_OPEN) {
+				if (waiterEmail.equalsIgnoreCase(cursor.getString(cursor
+						.getColumnIndex(TableBill.WAITER_EMAIL)))) {
+					return TablesActivity.TABLE_OCCUPIED_MINE;
+				} else {
+					return TablesActivity.TABLE_OCCUPIED_OTHER;
+				}
+			}
+		}
+		cursor.close();
+		return TablesActivity.TABLE_FREE;
+	}
+
+	public boolean hasOpenTableBill(int tableNo) {
+		String tNumber = tableNo + "";
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery("select " + TableBill.WAITER_EMAIL + ", "
+				+ TableBill.STATUS + " from " + TableBill.TABLE + " where "
+				+ TableBill.TABLE_NUMBER + "= ? order by " + TableBill.DATE
+				+ " DESC", new String[] { tNumber });
+
+		if (cursor.moveToFirst()) {
+			if (cursor.getInt(cursor.getColumnIndex(TableBill.STATUS)) == TBill.STATUS_OPEN) {
+				return true;
+
+			}
+		}
+		cursor.close();
+		return false;
+	}
 
 	public void notifyChanges(long count) {
 		if (!handler.hasMessages(0) && count > 0) {

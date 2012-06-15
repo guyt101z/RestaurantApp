@@ -15,6 +15,7 @@
     <string name="msg_empty_menu">The menu is empty!</string>
     <string name="msg_invalid_credentials">CARFAX did not recognize this email and password. Please try again</string>
     <string name="msg_network_error">Whoops! Couldn\'t connect at this time. Please try again.</string>
+    <string name="msg_service_unavailable">We\'re sorry, this Restaurant service is temporarily unavailable. Please try again.</string>
     <string name="progress_requesting">Requesting. Please wait&#8230; </string>
     <string name="random_long_string">Very Looooooooooooooooooooooooong Product Name</string>
     <string name="table_1">1</string>
