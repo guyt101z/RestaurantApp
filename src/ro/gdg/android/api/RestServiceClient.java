@@ -24,20 +24,19 @@ import ro.gdg.android.domain.UserLogin;
 import ro.gdg.android.net.HttpRequestFactoryBuilder;
 import ro.gdg.android.net.SignHandler;
 import ro.gdg.android.net.SignInterceptor;
-import ro.gdg.android.util.Security;
 import android.util.Log;
 
 public class RestServiceClient implements SignHandler {
 
 	private static final String TAG = RestServiceClient.class.getSimpleName();
 
-	public static final String SERVER_ADDRESS = "www.carfax.com";
+	public static final String SERVER_ADDRESS = "10.0.2.2";
 	public static final String CREATE_ACCOUNT_URL = "http://m.carfax.com";
 	public static final String SERVER_API_URL = "http://" + SERVER_ADDRESS
-			+ "/traveler-api/";
+			+ ":8084/RestaurantWeb/";
 
 	// Check the user’s credentials, returns account info
-	public static final String REQUEST_AUTH = "auth/check.json";
+	public static final String REQUEST_AUTH = "check.jsp";
 	// Request a list of previously run reports
 	public static final String REQUEST_RUNNED_REPORTS = "organizer/reports-run.json";
 	// Get the HTML needed to display a report
@@ -134,18 +133,22 @@ public class RestServiceClient implements SignHandler {
 		if (userCredentials != null) {
 			// the email should be combined with the timestamp with a colon
 			// character
-			String content = timestamp + ":"
-					+ userCredentials.getAccountEmail();
+//			String content = timestamp + ":"
+//					+ userCredentials.getAccountEmail();
 			// the user's password should be uppercased, then hashed using
 			// SHA512 to
 			// produce the key : key = SHA512(PASSWORD)
 			// signature is computed as HMAC_SHA512(key, content)
-			String signature = Security.hashHmacSHA512(content,
-					Security.hashWithSHA512(userCredentials.getPassword()
-							.toUpperCase()));
+//			String signature = Security.hashHmacSHA512(content,
+//					Security.hashWithSHA512(userCredentials.getPassword()
+//							.toUpperCase()));
 
+//			return url + "email=" + userCredentials.getAccountEmail()
+//					+ "&timestamp=" + timestamp + "&signature=" + signature;
+			
+			//TODO encrypt password
 			return url + "email=" + userCredentials.getAccountEmail()
-					+ "&timestamp=" + timestamp + "&signature=" + signature;
+					+ "&password=" + userCredentials.getPassword();
 		} else {
 			return url;
 		}
