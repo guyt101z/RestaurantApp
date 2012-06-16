@@ -25,7 +25,7 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 	WeakReference<Cursor> lastCursorRef = new WeakReference<Cursor>(null);
 
 	SimpleDateFormat formatter = new SimpleDateFormat(
-			"E, dd MMM yyyy HH:mm:ss Z");
+			"yyyy-MM-dd HH:mm:ss");
 
 	Handler handler = new Handler() {
 		@Override
@@ -199,30 +199,30 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 	}
 
 	public TableBillsHistory(Context context) {
-		super(context, "tablebillshistory.db", null, DATABASE_VERSION);
+		super(context, "restaurant.db", null, DATABASE_VERSION);
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE " + Category.TABLE + " (" + Category._ID
-				+ " INTEGER PRIMARY KEY," + Category.NAME + " STRING," + ");");
+				+ " INTEGER PRIMARY KEY," + Category.NAME + " STRING" + ");");
 
 		db.execSQL("CREATE TABLE " + Product.TABLE + " (" + Product._ID
 				+ " INTEGER PRIMARY KEY," + Product.NAME + " STRING,"
-				+ Product.CATEGORY_ID + " LONG" + Product.PRICE + " INTEGER"
+				+ Product.CATEGORY_ID + " LONG," + Product.PRICE + " INTEGER"
 				+ ");");
 
 		db.execSQL("CREATE TABLE " + TableBill.TABLE + " (" + TableBill._ID
 				+ " INTEGER PRIMARY KEY," + TableBill.WAITER_EMAIL + " STRING,"
 				+ TableBill.TABLE_NUMBER + " INTEGER," + TableBill.DATE
-				+ " LONG" + TableBill.STATUS + " INTEGER," + ");");
+				+ " LONG," + TableBill.STATUS + " INTEGER" + ");");
 
 		db.execSQL("CREATE TABLE " + ProductOrdered.TABLE + " ("
 				+ ProductOrdered._ID + " INTEGER PRIMARY KEY,"
 				+ ProductOrdered.TABLE_BILL_ID + " LONG,"
 				+ ProductOrdered.PRODUCT_ID + " LONG,"
-				+ ProductOrdered.STATE_ID + " LONG" + ProductOrdered.EXTRA_INFO
-				+ " TEXT" + ");");
+				+ ProductOrdered.STATE_ID + " LONG,"
+				+ ProductOrdered.EXTRA_INFO + " TEXT" + ");");
 
 		// TODO : is it necessary?
 		// db.execSQL("CREATE UNIQUE INDEX VIN_INDEX ON " + TableBill.TABLE +
@@ -294,6 +294,7 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 	}
 
 	public long replaceAllTableBills(TBill[] billsList) {
+		Log.i(TAG, "deleteAllTableBills billsList length:" + billsList.length);
 		SQLiteDatabase db = this.getWritableDatabase();
 		int count = db.delete(TableBill.TABLE, "1", null);
 		Log.i(TAG, "deleteAllTableBills count:" + count);
@@ -301,12 +302,12 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		long noOfRecords = 0;
 		ContentValues values = new ContentValues();
 
-		for (int i = 0; i < billsList.length; i++) {
+		for (int i = 0; i < billsList.length-1; i++) {
 			values.put(TableBill.WAITER_EMAIL, billsList[i].getWaiterEmail());
 			values.put(TableBill.TABLE_NUMBER, billsList[i].getTableNumber());
 			try {
 				values.put(TableBill.DATE,
-						formatter.parse(billsList[i].getDate()).getTime());
+						formatter.parse(billsList[i].getDate().substring(0, (billsList[i].getDate().length()-2))).getTime());
 			} catch (ParseException e) {
 				Log.e("", "Parse exception: ", e);
 			}
@@ -333,6 +334,7 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 	// }
 
 	public int getStateOfTable(String waiterEmail, int tableNo) {
+		Log.d(TAG, "getStateOfTable no=" + tableNo);
 		String tNumber = tableNo + "";
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery("select " + TableBill.WAITER_EMAIL + ", "
@@ -341,16 +343,20 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 				+ " DESC", new String[] { tNumber });
 
 		if (cursor.moveToFirst()) {
+			Log.d(TAG, "getStateOfTable at least one bill with table " + tableNo);
 			if (cursor.getInt(cursor.getColumnIndex(TableBill.STATUS)) == TBill.STATUS_OPEN) {
 				if (waiterEmail.equalsIgnoreCase(cursor.getString(cursor
 						.getColumnIndex(TableBill.WAITER_EMAIL)))) {
+					Log.d(TAG, "getStateOfTable table " + tableNo + " is MINE and is occupied");
 					return TablesActivity.TABLE_OCCUPIED_MINE;
 				} else {
+					Log.d(TAG, "getStateOfTable table " + tableNo + " is NOT MINE and is occupied");
 					return TablesActivity.TABLE_OCCUPIED_OTHER;
 				}
 			}
 		}
 		cursor.close();
+		Log.d(TAG, "getStateOfTable table " + tableNo + " is FREE");
 		return TablesActivity.TABLE_FREE;
 	}
 

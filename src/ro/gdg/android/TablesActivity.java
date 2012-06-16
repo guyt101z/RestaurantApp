@@ -48,9 +48,10 @@ public class TablesActivity extends Activity implements
 		if (!serviceClient.isLoggedIn()) {
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivity(intent);
+			finish();
+		} else {
+			refreshTables();
 		}
-
-		refreshTables();
 	}
 
 	@Override
@@ -80,12 +81,15 @@ public class TablesActivity extends Activity implements
 		setProgressVisible(false);
 
 		if (response == null) {
+			Log.d(TAG, "onSyncFinished response is null ");
 			return;
 		}
 
 		if (response.hasError()) {
+			Log.d(TAG, "onSyncFinished response has error: " + response.getErrorCode());
 			ErrorHandler.checkAndShowError(this, response, null);
 		} else {
+			Log.d(TAG, "onSyncFinished successfull");
 			refreshTables();
 		}
 	}
@@ -156,6 +160,7 @@ public class TablesActivity extends Activity implements
 	}
 
 	private void refreshTables() {
+		Log.d(TAG, "onSyncFinished successfull");
 		int no = 1;
 		for (Button btn : tableButtons) {
 			switch (serviceClient.getTableState(no)) {
@@ -173,6 +178,7 @@ public class TablesActivity extends Activity implements
 			default:
 				break;
 			}
+			no++;
 		}
 	}
 
@@ -185,5 +191,14 @@ public class TablesActivity extends Activity implements
 		if (bannerProgressBar != null) {
 			bannerProgressBar.setVisibility(visible ? View.VISIBLE : View.GONE);
 		}
+	}
+	
+	public void refresh(View view){
+		serviceClient.startTableBillsTask();
+	}
+	
+	public void logout(View view){
+		Intent intent = new Intent(this, LogoutActivity.class);
+		startActivity(intent);
 	}
 }

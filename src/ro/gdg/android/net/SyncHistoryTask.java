@@ -17,7 +17,7 @@ public class SyncHistoryTask extends AsyncTask<String, Void, TableBillsResponse>
 		TableBillsResponse response = null;
 
 		if (serviceClient != null) {
-			serviceClient.syncHistory();
+			return serviceClient.syncHistory();
 		}
 		return response;
 	}

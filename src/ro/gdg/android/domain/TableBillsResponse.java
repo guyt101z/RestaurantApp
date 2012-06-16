@@ -5,19 +5,19 @@ import java.util.Arrays;
 
 public class TableBillsResponse  extends RestaurantResponse {
 
-	private TBill [] tableBills;
+	private TBill [] tBills;
 
-	public TBill [] getTableBills() {
-		return tableBills;
+	public TBill [] getTBills() {
+		return tBills;
 	}
 
-	public void setTableBills(TBill [] tableBills) {
-		this.tableBills = tableBills;
+	public void setTBills(TBill [] tBills) {
+		this.tBills = tBills;
 	}
 
 	@Override
 	public String toString() {
-		return "TableBillsResponse [tBills=" + Arrays.toString(tableBills)
+		return "TableBillsResponse [tBills=" + Arrays.toString(tBills)
 				+ "]";
 	}
 	

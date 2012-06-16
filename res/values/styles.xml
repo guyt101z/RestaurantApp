@@ -21,6 +21,12 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16sp</item>
     </style>
+    
+    <style name="BottomActionButtonWhiteShadowText" parent="WhiteShadowText">
+        <item name="android:textColor">@color/button_finish</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">10sp</item>
+    </style>
 
     <style name="HeaderTitleWhiteShadowText" parent="WhiteShadowText">
         <item name="android:textStyle">bold</item>

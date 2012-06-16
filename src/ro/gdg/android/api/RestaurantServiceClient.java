@@ -19,7 +19,7 @@ public class RestaurantServiceClient {
 			.getSimpleName();
 
 	private static final String LAST_BILLS_RECEIVED_TIME = "last_bills_received_time";
-	public static final long REQUEST_TIME_INTERVAL = 120000L;
+	public static final long REQUEST_TIME_INTERVAL = 30000L;
 
 	private TableBillsHistory tableBillsHistory;
 	private RestServiceClient restServiceClient;
@@ -114,7 +114,7 @@ public class RestaurantServiceClient {
 		}
 	}
 
-	private void startTableBillsTask() {
+	public void startTableBillsTask() {
 		tableBillsTask = new SyncHistoryTask(this);
 		tableBillsTask.execute();
 		if (historyListener != null) {
@@ -173,10 +173,10 @@ public class RestaurantServiceClient {
 			response = getRestServiceClient().getTableBills(
 					userLogin.getAccountEmail(), userLogin.getPassword());
 
-			if (!response.hasError() && response.getTableBills() != null) {
+			if (!response.hasError() && response.getTBills() != null) {
 				markBillsReceived();
 				tableBillsHistory
-						.replaceAllTableBills(response.getTableBills());
+						.replaceAllTableBills(response.getTBills());
 			}
 
 		}

@@ -12,13 +12,13 @@
         android:id="@+id/tablesTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/title_tables"
         android:textAppearance="@style/GreyBoldShadowText"
-        android:textSize="20sp"
-        android:layout_gravity="center_horizontal" />
+        android:textSize="20sp" />
 
     <TableLayout
         android:id="@+id/tableLayout1"
@@ -35,6 +35,8 @@
 
             <Button
                 android:id="@+id/btn_table1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:background="@drawable/btn_green_selector"
                 android:gravity="center_vertical|center_horizontal"
@@ -46,6 +48,8 @@
 
             <Button
                 android:id="@+id/btn_table2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:background="@drawable/btn_green_selector"
                 android:gravity="center_vertical|center_horizontal"
@@ -57,6 +61,8 @@
 
             <Button
                 android:id="@+id/btn_table3"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:background="@drawable/btn_green_selector"
                 android:gravity="center_vertical|center_horizontal"
@@ -75,6 +81,8 @@
 
             <Button
                 android:id="@+id/btn_table4"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:background="@drawable/btn_green_selector"
                 android:gravity="center_vertical|center_horizontal"
@@ -86,6 +94,8 @@
 
             <Button
                 android:id="@+id/btn_table5"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:background="@drawable/btn_green_selector"
                 android:gravity="center_vertical|center_horizontal"
@@ -97,6 +107,8 @@
 
             <Button
                 android:id="@+id/btn_table6"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:background="@drawable/btn_green_selector"
                 android:gravity="center_vertical|center_horizontal"
@@ -115,6 +127,8 @@
 
             <Button
                 android:id="@+id/btn_table7"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:background="@drawable/btn_green_selector"
                 android:gravity="center_vertical|center_horizontal"
@@ -126,6 +140,8 @@
 
             <Button
                 android:id="@+id/btn_table8"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:background="@drawable/btn_green_selector"
                 android:gravity="center_vertical|center_horizontal"
@@ -137,6 +153,8 @@
 
             <Button
                 android:id="@+id/btn_table9"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_margin="5dp"
                 android:background="@drawable/btn_green_selector"
                 android:gravity="center_vertical|center_horizontal"
@@ -147,5 +165,69 @@
                 android:textSize="@dimen/table_btn_text_size" />
         </TableRow>
     </TableLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomActionBarLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/navbar"
+        android:padding="-8dp" >
+
+        <RelativeLayout
+            android:id="@+id/action_bar_refresh"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_action_bar"
+            android:onClick="refresh" >
+
+            <ImageView
+                android:id="@+id/icon_refresh"
+                android:layout_width="32dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:contentDescription="@string/descr_refresh_icon"
+                android:src="@drawable/menu_icon_refresh" />
+
+            <TextView
+                android:id="@+id/btn_refresh"
+                style="@style/BottomActionButtonWhiteShadowText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/icon_refresh"
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="4dp"
+                android:text="@string/btn_refresh" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/action_bar_logout"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_action_bar"
+            android:onClick="logout"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp" >
+
+            <ImageView
+                android:id="@+id/icon_logout"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:layout_centerHorizontal="true"
+                android:contentDescription="@string/btn_log_out"
+                android:src="@drawable/menu_icon_logout" />
+
+            <TextView
+                android:id="@+id/btn_logout"
+                style="@style/BottomActionButtonWhiteShadowText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/icon_logout"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="2dp"
+                android:text="@string/btn_log_out" />
+        </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
