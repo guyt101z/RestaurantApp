@@ -2,11 +2,14 @@ package ro.gdg.android.api;
 
 import ro.gdg.android.Settings;
 import ro.gdg.android.db.TableBillsHistory;
-import ro.gdg.android.domain.TBill;
+import ro.gdg.android.domain.MenuResponse;
+import ro.gdg.android.domain.TableBill;
 import ro.gdg.android.domain.TableBillsResponse;
 import ro.gdg.android.domain.UserLogin;
 import ro.gdg.android.net.CheckCredentialsTask;
+import ro.gdg.android.net.MenuUpdateListener;
 import ro.gdg.android.net.SyncHistoryTask;
+import ro.gdg.android.net.SyncMenuTask;
 import ro.gdg.android.net.TableBillsHistoryUpdateListener;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -31,6 +34,9 @@ public class RestaurantServiceClient {
 	volatile SyncHistoryTask tableBillsTask;
 	volatile TableBillsHistoryUpdateListener historyListener;
 
+	volatile SyncMenuTask menuTask;
+	volatile MenuUpdateListener menuListener;
+
 	volatile CheckCredentialsTask checkCredentialsTask;
 
 	public RestaurantServiceClient(Context context) {
@@ -54,6 +60,8 @@ public class RestaurantServiceClient {
 		return tableBillsHistory;
 	}
 
+	// ========================== User ====================================
+
 	public UserLogin getUserLogin() {
 		return userLogin;
 	}
@@ -64,15 +72,6 @@ public class RestaurantServiceClient {
 
 	public boolean isLoggedIn() {
 		return (userLogin != null);
-	}
-
-	public int getTableState(int tableNo) {
-		return tableBillsHistory.getStateOfTable(userLogin.getAccountEmail(),
-				tableNo);
-	}
-
-	public boolean hasOpenBill(int tableNo) {
-		return tableBillsHistory.hasOpenTableBill(tableNo);
 	}
 
 	public void setUserLogin(UserLogin userLogin) {
@@ -106,6 +105,8 @@ public class RestaurantServiceClient {
 			editor.commit();
 		}
 	}
+
+	// ===================== Table Bills ===================================
 
 	public void setTableBillsListener(TableBillsHistoryUpdateListener listener) {
 		this.historyListener = listener;
@@ -175,8 +176,7 @@ public class RestaurantServiceClient {
 
 			if (!response.hasError() && response.getTBills() != null) {
 				markBillsReceived();
-				tableBillsHistory
-						.replaceAllTableBills(response.getTBills());
+				tableBillsHistory.replaceAllTableBills(response.getTBills());
 			}
 
 		}
@@ -185,6 +185,69 @@ public class RestaurantServiceClient {
 
 	public synchronized void addTableBillToHistory(String waiter,
 			int tableNumber) {
-		tableBillsHistory.addTableBill(waiter, tableNumber, TBill.STATUS_OPEN);
+		tableBillsHistory.addTableBill(waiter, tableNumber,
+				TableBill.STATUS_OPEN);
+	}
+
+	public int getTableState(int tableNo) {
+		return tableBillsHistory.getStateOfTable(userLogin.getAccountEmail(),
+				tableNo);
+	}
+
+	public boolean hasOpenBill(int tableNo) {
+		return tableBillsHistory.hasOpenBill(tableNo);
+	}
+
+	// ======================= Menu =====================================
+
+	public void setMenuListener(MenuUpdateListener listener) {
+		this.menuListener = listener;
+		if (listener != null && isMenuSyncInProgress()) {
+			listener.onSyncStarted();
+		}
+	}
+
+	public synchronized MenuResponse synchronizeMenu() {
+		MenuResponse response = null;
+		if (isLoggedIn()) {
+			Log.d("MenuTask", "need to request menu");
+			response = getRestServiceClient().getMenu(
+					userLogin.getAccountEmail(), userLogin.getPassword());
+
+			if (!response.hasError() && response.getCategories() != null) {
+				tableBillsHistory.replaceAllMenu(response.getCategories());
+			}
+
+		}
+		return response;
+	}
+
+	public void syncMenu() {
+		// if the task is not already started
+		if (menuTask == null) {
+			Log.d(TAG, "should sync menu ... starting task");
+			startMenuTask();
+		} else {
+			Log.d(TAG, "should not sync menu");
+		}
+	}
+
+	public void startMenuTask() {
+		menuTask = new SyncMenuTask(this);
+		menuTask.execute();
+		if (menuListener != null) {
+			menuListener.onSyncStarted();
+		}
+	}
+
+	public void done(MenuResponse response) {
+		menuTask = null;
+		if (menuListener != null) {
+			menuListener.onSyncFinished(response);
+		}
+	}
+
+	public boolean isMenuSyncInProgress() {
+		return menuTask != null;
 	}
 }

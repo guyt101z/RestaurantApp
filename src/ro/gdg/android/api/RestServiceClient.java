@@ -20,6 +20,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import ro.gdg.android.domain.AuthResponse;
+import ro.gdg.android.domain.MenuResponse;
 import ro.gdg.android.domain.RestaurantResponse;
 import ro.gdg.android.domain.TableBillsResponse;
 import ro.gdg.android.domain.UserLogin;
@@ -40,13 +41,8 @@ public class RestServiceClient implements SignHandler {
 	public static final String REQUEST_AUTH = "check.jsp";
 	// Request a list of previously created table bills
 	public static final String REQUEST_TABLE_BILLS = "tableBills.jsp";
-
-	@Deprecated
-	// Turn a license plate & state into a list of possible VIN matches
-	public static final String REQUEST_PLATE_VINS = "quickvin/lookup.json";
-	@Deprecated
-	// Submit a VIN to add a new report to user’s inventory
-	public static final String REQUEST_RUN_REPORT = "organizer/reports-run.json";
+	// Request a list of the menu categories and each's products
+	private static final String REQUEST_MENU = "menu.jsp";
 
 	private RestTemplate restTemplate;
 	private UserLogin userCredentials;
@@ -186,6 +182,49 @@ public class RestServiceClient implements SignHandler {
 		} catch (Exception e) {
 			Log.e(TAG, "table bills request failed", e);
 			TableBillsResponse response = new TableBillsResponse();
+			response.setErrorCode(RestaurantResponse.NETWORK_ERROR_CODE);
+			return response;
+		}
+	}
+
+	/**
+	 * Request a list of the menu categories and each's products
+	 * 
+	 * @param email
+	 *            user's email
+	 * @param password
+	 *            user's password
+	 * @returns an object of type {@link MenuResponse} containing a list of the
+	 *          menu categories and each's products
+	 */
+	public MenuResponse getMenu(String email, String password) {
+		String url = SERVER_API_URL + REQUEST_MENU + "?";
+		Log.d(TAG, "getMenu url : " + url);
+
+		try {
+			ResponseEntity<MenuResponse> responseEntity = getRestTemplate()
+					.exchange(url, HttpMethod.GET, requestEntity,
+							MenuResponse.class);
+			Log.d(TAG, "menu response : " + responseEntity.getBody());
+			return responseEntity.getBody();
+		} catch (HttpClientErrorException e) {
+			Log.e(TAG, "menu request failed", e);
+			Log.e(TAG, "status code: " + e.getStatusCode());
+			MenuResponse response = new MenuResponse();
+			if (HttpStatus.FORBIDDEN == e.getStatusCode()) {
+				response.setErrorCode(RestaurantResponse.INVALID_CREDENTIALS_ERROR_CODE);
+			} else {
+				response.setErrorCode(RestaurantResponse.NETWORK_ERROR_CODE);
+			}
+			return response;
+		} catch (HttpStatusCodeException e) {
+			Log.e(TAG, "menu request failed", e);
+			MenuResponse response = new MenuResponse();
+			response.setErrorCode(RestaurantResponse.SERVER_ERROR_CODE);
+			return response;
+		} catch (Exception e) {
+			Log.e(TAG, "menu request failed", e);
+			MenuResponse response = new MenuResponse();
 			response.setErrorCode(RestaurantResponse.NETWORK_ERROR_CODE);
 			return response;
 		}

@@ -30,8 +30,8 @@ public class CheckCredentialsTask extends
 		serviceClient.getRestServiceClient().setUserCredentials(userLogin);
 
 		// delete history if new user logs in
-		if (!userLogin.getAccountEmail()
-				.equalsIgnoreCase(serviceClient.getSettings().getEmail())) {
+		if (!userLogin.getAccountEmail().equalsIgnoreCase(
+				serviceClient.getSettings().getEmail())) {
 			Log.d(TAG, "new user => delete history");
 			// serviceClient.getReportsHistory().deleteAllRecords();
 		}
@@ -45,6 +45,7 @@ public class CheckCredentialsTask extends
 		if (response != null && response.getAccount() != null) {
 			serviceClient.setUserLogin(new UserLogin(response.getAccount(),
 					userLogin.getPassword()));
+			serviceClient.synchronizeMenu();
 		}
 		if (listener != null) {
 			listener.done(response);

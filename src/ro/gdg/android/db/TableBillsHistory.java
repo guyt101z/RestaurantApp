@@ -5,7 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import ro.gdg.android.TablesActivity;
-import ro.gdg.android.domain.TBill;
+import ro.gdg.android.domain.Category;
+import ro.gdg.android.domain.TableBill;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -24,18 +25,86 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 
 	WeakReference<Cursor> lastCursorRef = new WeakReference<Cursor>(null);
 
-	SimpleDateFormat formatter = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
+	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-
 			updateCursor();
 		}
 	};
 
-	public static class TableBill implements BaseColumns {
+	public static class CategoryBC implements BaseColumns {
+
+		public static final String TABLE = "category";
+
+		public static final String NAME = "name";
+
+		public static final String SORT_DEFAULT = CategoryBC._ID + " ASC";
+
+		public long id;
+		public String name;
+
+		private CategoryBC() {
+		}
+
+		public CategoryBC(long id, String name) {
+			super();
+			this.id = id;
+			this.name = name;
+		}
+
+		public static CategoryBC readCategory(Cursor cursor) {
+			CategoryBC category = new CategoryBC();
+			category.id = cursor.getLong(cursor.getColumnIndex(CategoryBC._ID));
+			category.name = cursor.getString(cursor
+					.getColumnIndex(CategoryBC.NAME));
+			return category;
+
+		}
+	}
+
+	public static class ProductBC implements BaseColumns {
+
+		public static final String TABLE = "product";
+
+		public static final String NAME = "name";
+		public static final String CATEGORY_ID = "category_id";
+		public static final String PRICE = "price";
+
+		public static final String SORT_DEFAULT = ProductBC._ID + " ASC";
+
+		public long id;
+		public String name;
+		public long categoryId;
+		public int price;
+
+		private ProductBC() {
+		}
+
+		public ProductBC(long id, String name, long categoryId, int price) {
+			super();
+			this.id = id;
+			this.name = name;
+			this.categoryId = categoryId;
+			this.price = price;
+		}
+
+		public static ProductBC readProduct(Cursor cursor) {
+			ProductBC product = new ProductBC();
+			product.id = cursor.getLong(cursor.getColumnIndex(ProductBC._ID));
+			product.name = cursor.getString(cursor
+					.getColumnIndex(ProductBC.NAME));
+			product.categoryId = cursor.getLong(cursor
+					.getColumnIndex(ProductBC.CATEGORY_ID));
+			product.price = cursor.getInt(cursor
+					.getColumnIndex(ProductBC.PRICE));
+			return product;
+
+		}
+	}
+
+	public static class TableBillBC implements BaseColumns {
 
 		public static final String TABLE = "table_bill";
 
@@ -44,7 +113,7 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		public static final String DATE = "creation_time";
 		public static final String STATUS = "status";
 
-		public static final String SORT_DEFAULT = TableBill.DATE + " DESC";
+		public static final String SORT_DEFAULT = TableBillBC.DATE + " DESC";
 
 		public long id;
 		public String waiterEmail;
@@ -52,10 +121,10 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		public long date;
 		public int status;
 
-		private TableBill() {
+		private TableBillBC() {
 		}
 
-		public TableBill(long id, String waiterEmail, int tableNumber,
+		public TableBillBC(long id, String waiterEmail, int tableNumber,
 				long date, int status) {
 			super();
 			this.id = id;
@@ -65,92 +134,24 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 			this.status = status;
 		}
 
-		public static TableBill readTableBill(Cursor cursor) {
-			TableBill tableBill = new TableBill();
-			tableBill.id = cursor.getLong(cursor.getColumnIndex(TableBill._ID));
+		public static TableBillBC readTableBill(Cursor cursor) {
+			TableBillBC tableBill = new TableBillBC();
+			tableBill.id = cursor.getLong(cursor
+					.getColumnIndex(TableBillBC._ID));
 			tableBill.waiterEmail = cursor.getString(cursor
-					.getColumnIndex(TableBill.WAITER_EMAIL));
+					.getColumnIndex(TableBillBC.WAITER_EMAIL));
 			tableBill.tableNumber = cursor.getInt(cursor
-					.getColumnIndex(TableBill.TABLE_NUMBER));
+					.getColumnIndex(TableBillBC.TABLE_NUMBER));
 			tableBill.date = cursor.getLong(cursor
-					.getColumnIndex(TableBill.DATE));
+					.getColumnIndex(TableBillBC.DATE));
 			tableBill.status = cursor.getInt(cursor
-					.getColumnIndex(TableBill.STATUS));
+					.getColumnIndex(TableBillBC.STATUS));
 			return tableBill;
 
 		}
 	}
 
-	public static class Category implements BaseColumns {
-
-		public static final String TABLE = "category";
-
-		public static final String NAME = "name";
-
-		public static final String SORT_DEFAULT = Category.NAME + " ASC";
-
-		public long id;
-		public String name;
-
-		private Category() {
-		}
-
-		public Category(long id, String name) {
-			super();
-			this.id = id;
-			this.name = name;
-		}
-
-		public static Category readCategory(Cursor cursor) {
-			Category category = new Category();
-			category.id = cursor.getLong(cursor.getColumnIndex(Category._ID));
-			category.name = cursor.getString(cursor
-					.getColumnIndex(Category.NAME));
-			return category;
-
-		}
-	}
-
-	public static class Product implements BaseColumns {
-
-		public static final String TABLE = "product";
-
-		public static final String NAME = "name";
-		public static final String CATEGORY_ID = "category_id";
-		public static final String PRICE = "price";
-
-		public static final String SORT_DEFAULT = Product.CATEGORY_ID + " ASC";
-
-		public long id;
-		public String name;
-		public long categoryId;
-		public int price;
-
-		private Product() {
-		}
-
-		public Product(long id, String name, long categoryId, int price) {
-			super();
-			this.id = id;
-			this.name = name;
-			this.categoryId = categoryId;
-			this.price = price;
-		}
-
-		public static Product readProduct(Cursor cursor) {
-			Product product = new Product();
-			product.id = cursor.getLong(cursor.getColumnIndex(Product._ID));
-			product.name = cursor
-					.getString(cursor.getColumnIndex(Product.NAME));
-			product.categoryId = cursor.getLong(cursor
-					.getColumnIndex(Product.CATEGORY_ID));
-			product.price = cursor.getInt(cursor.getColumnIndex(Product.PRICE));
-			return product;
-
-		}
-	}
-
-	public static class ProductOrdered implements BaseColumns {
+	public static class ProductOrderedBC implements BaseColumns {
 
 		public static final String TABLE = "product_ordered";
 
@@ -159,7 +160,7 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		public static final String STATE_ID = "state_id";
 		public static final String EXTRA_INFO = "extra_info";
 
-		public static final String SORT_DEFAULT = ProductOrdered.TABLE_BILL_ID
+		public static final String SORT_DEFAULT = ProductOrderedBC.TABLE_BILL_ID
 				+ " DESC";
 
 		public long id;
@@ -168,10 +169,10 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		public long stateId;
 		public String extraInfo;
 
-		private ProductOrdered() {
+		private ProductOrderedBC() {
 		}
 
-		public ProductOrdered(long id, long tableBillId, long productId,
+		public ProductOrderedBC(long id, long tableBillId, long productId,
 				long stateId, String extraInfo) {
 			super();
 			this.id = id;
@@ -181,18 +182,18 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 			this.extraInfo = extraInfo;
 		}
 
-		public static ProductOrdered readProductOrdered(Cursor cursor) {
-			ProductOrdered productOrdered = new ProductOrdered();
+		public static ProductOrderedBC readProductOrdered(Cursor cursor) {
+			ProductOrderedBC productOrdered = new ProductOrderedBC();
 			productOrdered.id = cursor.getLong(cursor
-					.getColumnIndex(ProductOrdered._ID));
+					.getColumnIndex(ProductOrderedBC._ID));
 			productOrdered.tableBillId = cursor.getLong(cursor
-					.getColumnIndex(ProductOrdered.TABLE_BILL_ID));
+					.getColumnIndex(ProductOrderedBC.TABLE_BILL_ID));
 			productOrdered.productId = cursor.getLong(cursor
-					.getColumnIndex(ProductOrdered.PRODUCT_ID));
+					.getColumnIndex(ProductOrderedBC.PRODUCT_ID));
 			productOrdered.stateId = cursor.getLong(cursor
-					.getColumnIndex(ProductOrdered.STATE_ID));
+					.getColumnIndex(ProductOrderedBC.STATE_ID));
 			productOrdered.extraInfo = cursor.getString(cursor
-					.getColumnIndex(ProductOrdered.EXTRA_INFO));
+					.getColumnIndex(ProductOrderedBC.EXTRA_INFO));
 			return productOrdered;
 
 		}
@@ -204,25 +205,26 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL("CREATE TABLE " + Category.TABLE + " (" + Category._ID
-				+ " INTEGER PRIMARY KEY," + Category.NAME + " STRING" + ");");
+		db.execSQL("CREATE TABLE " + CategoryBC.TABLE + " (" + CategoryBC._ID
+				+ " INTEGER PRIMARY KEY," + CategoryBC.NAME + " STRING" + ");");
 
-		db.execSQL("CREATE TABLE " + Product.TABLE + " (" + Product._ID
-				+ " INTEGER PRIMARY KEY," + Product.NAME + " STRING,"
-				+ Product.CATEGORY_ID + " LONG," + Product.PRICE + " INTEGER"
+		db.execSQL("CREATE TABLE " + ProductBC.TABLE + " (" + ProductBC._ID
+				+ " INTEGER PRIMARY KEY," + ProductBC.NAME + " STRING,"
+				+ ProductBC.CATEGORY_ID + " LONG," + ProductBC.PRICE
+				+ " INTEGER" + ");");
+
+		db.execSQL("CREATE TABLE " + TableBillBC.TABLE + " (" + TableBillBC._ID
+				+ " INTEGER PRIMARY KEY," + TableBillBC.WAITER_EMAIL
+				+ " STRING," + TableBillBC.TABLE_NUMBER + " INTEGER,"
+				+ TableBillBC.DATE + " LONG," + TableBillBC.STATUS + " INTEGER"
 				+ ");");
 
-		db.execSQL("CREATE TABLE " + TableBill.TABLE + " (" + TableBill._ID
-				+ " INTEGER PRIMARY KEY," + TableBill.WAITER_EMAIL + " STRING,"
-				+ TableBill.TABLE_NUMBER + " INTEGER," + TableBill.DATE
-				+ " LONG," + TableBill.STATUS + " INTEGER" + ");");
-
-		db.execSQL("CREATE TABLE " + ProductOrdered.TABLE + " ("
-				+ ProductOrdered._ID + " INTEGER PRIMARY KEY,"
-				+ ProductOrdered.TABLE_BILL_ID + " LONG,"
-				+ ProductOrdered.PRODUCT_ID + " LONG,"
-				+ ProductOrdered.STATE_ID + " LONG,"
-				+ ProductOrdered.EXTRA_INFO + " TEXT" + ");");
+		db.execSQL("CREATE TABLE " + ProductOrderedBC.TABLE + " ("
+				+ ProductOrderedBC._ID + " INTEGER PRIMARY KEY,"
+				+ ProductOrderedBC.TABLE_BILL_ID + " LONG,"
+				+ ProductOrderedBC.PRODUCT_ID + " LONG,"
+				+ ProductOrderedBC.STATE_ID + " LONG,"
+				+ ProductOrderedBC.EXTRA_INFO + " TEXT" + ");");
 
 		// TODO : is it necessary?
 		// db.execSQL("CREATE UNIQUE INDEX VIN_INDEX ON " + TableBill.TABLE +
@@ -235,17 +237,19 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
 				+ newVersion + ", which will destroy all old data");
-		db.execSQL("DROP TABLE IF EXISTS " + ProductOrdered.TABLE);
-		db.execSQL("DROP TABLE IF EXISTS " + TableBill.TABLE);
-		db.execSQL("DROP TABLE IF EXISTS " + Product.TABLE);
-		db.execSQL("DROP TABLE IF EXISTS " + Category.TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + ProductOrderedBC.TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + TableBillBC.TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + ProductBC.TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + CategoryBC.TABLE);
 		onCreate(db);
 	}
 
+	// ===================== Table Bills ===================================
+
 	public Cursor getAllTableBills() {
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor c = db
-				.query(TableBill.TABLE, null, null, null, null, null, null);
+		Cursor c = db.query(TableBillBC.TABLE, null, null, null, null, null,
+				null);
 
 		lastCursorRef = new WeakReference<Cursor>(c);
 		return c;
@@ -254,29 +258,30 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 	public int getNoOfTableBills() {
 		int noOfTableBills;
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.query(TableBill.TABLE, null, null, null, null, null,
-				null);
+		Cursor cursor = db.query(TableBillBC.TABLE, null, null, null, null,
+				null, null);
 		noOfTableBills = cursor.getCount();
 		cursor.close();
 		return noOfTableBills;
 	}
 
-	public TableBill addTableBill(String waiter, int tableNumber, int status) {
+	public TableBillBC addTableBill(String waiter, int tableNumber, int status) {
 		long creationDate = System.currentTimeMillis();
 
 		SQLiteDatabase db = this.getWritableDatabase();
-		TableBill bill = null;
+		TableBillBC bill = null;
 		int count = 0;
 		// new record
 		ContentValues values = new ContentValues();
-		values.put(TableBill.WAITER_EMAIL, waiter);
-		values.put(TableBill.TABLE_NUMBER, tableNumber);
-		values.put(TableBill.DATE, creationDate);
-		values.put(TableBill.STATUS, status);
-		long id = db.insert(TableBill.TABLE, null, values);
+		values.put(TableBillBC.WAITER_EMAIL, waiter);
+		values.put(TableBillBC.TABLE_NUMBER, tableNumber);
+		values.put(TableBillBC.DATE, creationDate);
+		values.put(TableBillBC.STATUS, status);
+		long id = db.insert(TableBillBC.TABLE, null, values);
 		if (id != -1) {
 			Log.i(TAG, "addTableBill successful");
-			bill = new TableBill(id, waiter, tableNumber, creationDate, status);
+			bill = new TableBillBC(id, waiter, tableNumber, creationDate,
+					status);
 			count++;
 		} // else failure
 
@@ -286,37 +291,41 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 
 	public int deleteAllTableBills() {
 		SQLiteDatabase db = this.getWritableDatabase();
-		int count = db.delete(TableBill.TABLE, "1", null);
+		int count = db.delete(TableBillBC.TABLE, "1", null);
 		Log.i(TAG, "deleteAllTableBills count:" + count);
 
 		notifyChanges(count);
 		return count;
 	}
 
-	public long replaceAllTableBills(TBill[] billsList) {
-		Log.i(TAG, "deleteAllTableBills billsList length:" + billsList.length);
+	public long replaceAllTableBills(TableBill[] billsList) {
+		Log.i(TAG, "replaceAllTableBills billsList length:" + billsList.length);
 		SQLiteDatabase db = this.getWritableDatabase();
-		int count = db.delete(TableBill.TABLE, "1", null);
-		Log.i(TAG, "deleteAllTableBills count:" + count);
+		int count = db.delete(TableBillBC.TABLE, "1", null);
+		Log.i(TAG, "replaceAllTableBills count:" + count);
 
 		long noOfRecords = 0;
 		ContentValues values = new ContentValues();
 
-		for (int i = 0; i < billsList.length-1; i++) {
-			values.put(TableBill.WAITER_EMAIL, billsList[i].getWaiterEmail());
-			values.put(TableBill.TABLE_NUMBER, billsList[i].getTableNumber());
+		for (int i = 0; i < billsList.length - 1; i++) {
+			values.put(TableBillBC.WAITER_EMAIL, billsList[i].getWaiterEmail());
+			values.put(TableBillBC.TABLE_NUMBER, billsList[i].getTableNumber());
 			try {
-				values.put(TableBill.DATE,
-						formatter.parse(billsList[i].getDate().substring(0, (billsList[i].getDate().length()-2))).getTime());
+				values.put(
+						TableBillBC.DATE,
+						formatter.parse(
+								billsList[i].getDate().substring(0,
+										(billsList[i].getDate().length() - 2)))
+								.getTime());
 			} catch (ParseException e) {
 				Log.e("", "Parse exception: ", e);
 			}
-			values.put(TableBill.STATUS, billsList[i].getStatus());
-			if (db.insert(TableBill.TABLE, null, values) != -1) {
+			values.put(TableBillBC.STATUS, billsList[i].getStatus());
+			if (db.insert(TableBillBC.TABLE, null, values) != -1) {
 				noOfRecords++;
 			}
 		}
-		Log.i(TAG, "addAllRecords count:" + noOfRecords);
+		Log.i(TAG, "replaceAllTableBills added bills count:" + noOfRecords);
 
 		notifyChanges(noOfRecords);
 		return noOfRecords;
@@ -337,20 +346,23 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		Log.d(TAG, "getStateOfTable no=" + tableNo);
 		String tNumber = tableNo + "";
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery("select " + TableBill.WAITER_EMAIL + ", "
-				+ TableBill.STATUS + " from " + TableBill.TABLE + " where "
-				+ TableBill.TABLE_NUMBER + "= ? order by " + TableBill.DATE
+		Cursor cursor = db.rawQuery("select " + TableBillBC.WAITER_EMAIL + ", "
+				+ TableBillBC.STATUS + " from " + TableBillBC.TABLE + " where "
+				+ TableBillBC.TABLE_NUMBER + "= ? order by " + TableBillBC.DATE
 				+ " DESC", new String[] { tNumber });
 
 		if (cursor.moveToFirst()) {
-			Log.d(TAG, "getStateOfTable at least one bill with table " + tableNo);
-			if (cursor.getInt(cursor.getColumnIndex(TableBill.STATUS)) == TBill.STATUS_OPEN) {
+			Log.d(TAG, "getStateOfTable at least one bill with table "
+					+ tableNo);
+			if (cursor.getInt(cursor.getColumnIndex(TableBillBC.STATUS)) == TableBill.STATUS_OPEN) {
 				if (waiterEmail.equalsIgnoreCase(cursor.getString(cursor
-						.getColumnIndex(TableBill.WAITER_EMAIL)))) {
-					Log.d(TAG, "getStateOfTable table " + tableNo + " is MINE and is occupied");
+						.getColumnIndex(TableBillBC.WAITER_EMAIL)))) {
+					Log.d(TAG, "getStateOfTable table " + tableNo
+							+ " is MINE and is occupied");
 					return TablesActivity.TABLE_OCCUPIED_MINE;
 				} else {
-					Log.d(TAG, "getStateOfTable table " + tableNo + " is NOT MINE and is occupied");
+					Log.d(TAG, "getStateOfTable table " + tableNo
+							+ " is NOT MINE and is occupied");
 					return TablesActivity.TABLE_OCCUPIED_OTHER;
 				}
 			}
@@ -360,16 +372,16 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		return TablesActivity.TABLE_FREE;
 	}
 
-	public boolean hasOpenTableBill(int tableNo) {
+	public boolean hasOpenBill(int tableNo) {
 		String tNumber = tableNo + "";
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery("select " + TableBill.WAITER_EMAIL + ", "
-				+ TableBill.STATUS + " from " + TableBill.TABLE + " where "
-				+ TableBill.TABLE_NUMBER + "= ? order by " + TableBill.DATE
+		Cursor cursor = db.rawQuery("select " + TableBillBC.WAITER_EMAIL + ", "
+				+ TableBillBC.STATUS + " from " + TableBillBC.TABLE + " where "
+				+ TableBillBC.TABLE_NUMBER + "= ? order by " + TableBillBC.DATE
 				+ " DESC", new String[] { tNumber });
 
 		if (cursor.moveToFirst()) {
-			if (cursor.getInt(cursor.getColumnIndex(TableBill.STATUS)) == TBill.STATUS_OPEN) {
+			if (cursor.getInt(cursor.getColumnIndex(TableBillBC.STATUS)) == TableBill.STATUS_OPEN) {
 				return true;
 
 			}
@@ -377,6 +389,144 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		cursor.close();
 		return false;
 	}
+
+	// ======================= Menu =====================================
+
+	public long replaceAllMenu(Category[] categories) {
+		Log.i(TAG, "replaceAllMenu categories length:" + categories.length);
+		SQLiteDatabase db = this.getWritableDatabase();
+		int count = db.delete(ProductBC.TABLE, "1", null);
+		Log.i(TAG, "replaceAllMenu deleted products count:" + count);
+		count = db.delete(CategoryBC.TABLE, "1", null);
+		Log.i(TAG, "replaceAllMenu deleted categories count:" + count);
+
+		long noOfCategories = 0;
+		long noOfProducts = 0;
+		ContentValues values = new ContentValues();
+
+		for (int i = 0; i < categories.length - 1; i++) {
+			values.put(CategoryBC.NAME, categories[i].getName());
+			long id = db.insert(CategoryBC.TABLE, null, values);
+			Log.i(TAG, "replaceAllMenu inserted category id: " + id);
+			if (id != -1) {
+				noOfCategories++;
+			}
+			ContentValues values2 = new ContentValues();
+			for (int j = 0; j < categories[i].getProducts().length; j++) {
+				Log.i(TAG,
+						"replaceAllMenu inserted product name: "
+								+ categories[i].getProducts()[j].getName()
+								+ " and categid=" + id + " and price="
+								+ categories[i].getProducts()[j].getPrice());
+				values2.put(ProductBC.NAME,
+						categories[i].getProducts()[j].getName());
+				values2.put(ProductBC.CATEGORY_ID, id);
+				values2.put(ProductBC.PRICE,
+						categories[i].getProducts()[j].getPrice());
+				if (db.insert(ProductBC.TABLE, null, values2) != -1) {
+					noOfProducts++;
+				}
+			}
+		}
+		Log.i(TAG, "replaceAllMenu added categories count:" + noOfCategories);
+		Log.i(TAG, "replaceAllMenu added products count:" + noOfProducts);
+
+		notifyChanges(noOfCategories + noOfProducts);
+		return noOfCategories + noOfProducts;
+	}
+
+	public Cursor getAllCategories() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.query(CategoryBC.TABLE, null, null, null, null, null,
+				null);
+
+		lastCursorRef = new WeakReference<Cursor>(c);
+		return c;
+	}
+
+	public Cursor getProductsByCategory(String category) {
+		Log.d(TAG, "getProductsByCategory name=" + category);
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		Cursor cursor = db
+				.rawQuery(
+						"SELECT product._id AS _id, product._id AS product_id, product.name AS product_name, "
+								+ "product.price AS product_price, category_id, category.name AS category_name "
+								+ "FROM product INNER JOIN category ON (category_id = category._id) "
+								+ "WHERE category.name = ? "
+								+ "ORDER BY product._id",
+						new String[] { category });
+
+		lastCursorRef = new WeakReference<Cursor>(cursor);
+		return cursor;
+	}
+
+	public Cursor getProductsByCategoryFiltered(String category, String filter) {
+		Log.d(TAG, "getProductsByCategoryFiltered name=" + category
+				+ " and filter=" + filter);
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		filter = '%' + filter + '%';
+
+		Cursor cursor = db
+				.rawQuery(
+						"SELECT product._id AS _id, product._id AS product_id, product.name AS product_name, "
+								+ "product.price AS product_price, category_id, category.name AS category_name "
+								+ "FROM product INNER JOIN category ON (category_id = category._id) "
+								+ "WHERE category.name = ? and (category.name LIKE ? OR product.name LIKE ?) "
+								+ "ORDER BY product._id", new String[] {
+								category, filter, filter });
+
+		lastCursorRef = new WeakReference<Cursor>(cursor);
+		return cursor;
+	}
+
+	public int getCategoryIdByName(String categoryName) {
+		Log.d(TAG, "getCategoryById name=" + categoryName);
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		Cursor cursor = db.rawQuery("select * from " + CategoryBC.TABLE
+				+ " where " + CategoryBC.NAME + "= ? ",
+				new String[] { categoryName });
+
+		if (cursor.moveToFirst()) {
+			return cursor.getInt(cursor.getColumnIndex(CategoryBC._ID));
+		}
+
+		return -1;
+	}
+
+	public Cursor getCategories() {
+		Log.d(TAG, "getCategories");
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery("SELECT category.name AS category_name, "
+				+ "MIN(product._id) as _id, COUNT(product._id) as count "
+				+ "FROM category "
+				+ "INNER JOIN product ON (product.category_id = category._id) "
+				+ "GROUP BY category_name ORDER BY category._id", null);
+
+		Log.d(TAG, "getCategories count=" + cursor.getCount());
+		return cursor;
+	}
+
+	public Cursor getCategoriesFiltered(String filter) {
+		Log.d(TAG, "getCategoriesFiltered filter=" + filter);
+		SQLiteDatabase db = this.getReadableDatabase();
+		filter = '%' + filter + '%';
+
+		Cursor cursor = db.rawQuery("SELECT category.name AS category_name, "
+				+ "MIN(product._id) as _id, COUNT(product._id) as count "
+				+ "FROM category "
+				+ "INNER JOIN product ON (product.category_id = category._id) "
+				+ "WHERE product.name LIKE ? "
+				+ "GROUP BY category_name  ORDER BY category._id",
+				new String[] { filter });
+
+		Log.d(TAG, "getCategoriesFiltered count=" + cursor.getCount());
+		return cursor;
+	}
+
+	// ======================= Other =====================================
 
 	public void notifyChanges(long count) {
 		if (!handler.hasMessages(0) && count > 0) {

@@ -1,6 +1,6 @@
 package ro.gdg.android.domain;
 
-public class TBill {
+public class TableBill {
 	public static final int STATUS_OPEN = 0;
 	public static final int STATUS_CLOSED = 1;
 

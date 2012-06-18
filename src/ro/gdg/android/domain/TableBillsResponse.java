@@ -5,13 +5,13 @@ import java.util.Arrays;
 
 public class TableBillsResponse  extends RestaurantResponse {
 
-	private TBill [] tBills;
+	private TableBill [] tBills;
 
-	public TBill [] getTBills() {
+	public TableBill [] getTBills() {
 		return tBills;
 	}
 
-	public void setTBills(TBill [] tBills) {
+	public void setTBills(TableBill [] tBills) {
 		this.tBills = tBills;
 	}
 
