@@ -9,6 +9,15 @@ public class TableBill {
 	private String date;
 	private int status;
 
+	public TableBill(String waiterEmail, int tableNumber, String date,
+			int status) {
+		super();
+		this.waiterEmail = waiterEmail;
+		this.tableNumber = tableNumber;
+		this.date = date;
+		this.status = status;
+	}
+
 	public String getWaiterEmail() {
 		return waiterEmail;
 	}

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 
 import ro.gdg.android.TablesActivity;
 import ro.gdg.android.domain.Category;
+import ro.gdg.android.domain.Product;
 import ro.gdg.android.domain.TableBill;
 import android.content.ContentValues;
 import android.content.Context;
@@ -265,11 +266,10 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		return noOfTableBills;
 	}
 
-	public TableBillBC addTableBill(String waiter, int tableNumber, int status) {
+	public long addTableBill(String waiter, int tableNumber, int status) {
 		long creationDate = System.currentTimeMillis();
 
 		SQLiteDatabase db = this.getWritableDatabase();
-		TableBillBC bill = null;
 		int count = 0;
 		// new record
 		ContentValues values = new ContentValues();
@@ -280,13 +280,11 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		long id = db.insert(TableBillBC.TABLE, null, values);
 		if (id != -1) {
 			Log.i(TAG, "addTableBill successful");
-			bill = new TableBillBC(id, waiter, tableNumber, creationDate,
-					status);
 			count++;
 		} // else failure
 
 		notifyChanges(count);
-		return bill;
+		return id;
 	}
 
 	public int deleteAllTableBills() {
@@ -461,6 +459,35 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		return cursor;
 	}
 
+	public Product getProductById(long id) {
+		Log.d(TAG, "getProductById id=" + id);
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		Cursor cursor = db.rawQuery("SELECT * " + "FROM product "
+				+ "WHERE product._id = ? ", new String[] { id + "" });
+
+		if (cursor.moveToFirst()) {
+			return new Product(cursor.getString(cursor
+					.getColumnIndex(ProductBC.NAME)), cursor.getInt(cursor
+					.getColumnIndex(ProductBC.CATEGORY_ID)),
+					cursor.getInt(cursor.getColumnIndex(ProductBC.PRICE)));
+		}
+		return null;
+	}
+
+	public String getProductNameById(long id) {
+		Log.d(TAG, "getProductNameById id=" + id);
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		Cursor cursor = db.rawQuery("SELECT * " + "FROM product "
+				+ "WHERE product._id = ? ", new String[] { id + "" });
+
+		if (cursor.moveToFirst()) {
+			return cursor.getString(cursor.getColumnIndex(ProductBC.NAME));
+		}
+		return null;
+	}
+
 	public Cursor getProductsByCategoryFiltered(String category, String filter) {
 		Log.d(TAG, "getProductsByCategoryFiltered name=" + category
 				+ " and filter=" + filter);
@@ -524,6 +551,26 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 
 		Log.d(TAG, "getCategoriesFiltered count=" + cursor.getCount());
 		return cursor;
+	}
+
+	public long addOrderedProduct(long tableBillId, long productId,
+			int stateId, String extraInfo) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		int count = 0;
+		// new record
+		ContentValues values = new ContentValues();
+		values.put(ProductOrderedBC.TABLE_BILL_ID, tableBillId);
+		values.put(ProductOrderedBC.PRODUCT_ID, productId);
+		values.put(ProductOrderedBC.STATE_ID, stateId);
+		values.put(ProductOrderedBC.EXTRA_INFO, extraInfo);
+		long id = db.insert(ProductOrderedBC.TABLE, null, values);
+		if (id != -1) {
+			Log.i(TAG, "addOrderedProduct successful");
+			count++;
+		} // else failure
+
+		notifyChanges(count);
+		return id;
 	}
 
 	// ======================= Other =====================================

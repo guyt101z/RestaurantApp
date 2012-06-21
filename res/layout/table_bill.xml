@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/actionBar"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/navbar"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/action_bar_payment"
+            style="@style/BottomActionButtonWhiteShadowText"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_action_bar"
+            android:drawableTop="@drawable/btn_payment"
+            android:gravity="center"
+            android:onClick="payment"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="4dp"
+            android:text="@string/btn_payment" />
+
+        <Button
+            android:id="@+id/action_bar_add"
+            style="@style/BottomActionButtonWhiteShadowText"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/action_bar_payment"
+            android:background="@drawable/btn_action_bar"
+            android:drawableTop="@drawable/btn_add"
+            android:gravity="center"
+            android:onClick="add"
+            android:paddingLeft="26dp"
+            android:paddingRight="26dp"
+            android:paddingTop="2dp"
+            android:text="@string/btn_add" />
+
+        <TextView
+            android:id="@+id/actionbarTitle"
+            style="@style/HeaderTitleWhiteShadowText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:lines="1"
+            android:paddingLeft="8dp"
+            android:singleLine="true"
+            android:text="@string/title_bill" />
+
+        <TextView
+            android:id="@+id/actionbarTotalValue"
+            style="@style/HeaderTitleWhiteShadowText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/action_bar_add"
+            android:layout_toRightOf="@id/actionbarTitle"
+            android:ellipsize="end"
+            android:lines="1"
+            android:paddingLeft="8dp"
+            android:singleLine="true"
+            android:text="@string/random_value" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:cacheColorHint="@android:color/transparent" />
+
+</LinearLayout>

@@ -31,7 +31,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:hint="@string/hint_email_address"
-        android:inputType="textCapCharacters" />
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/loginPassword"
@@ -41,7 +41,6 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:hint="@string/hint_password"
-        android:inputType="textCapCharacters"
         android:password="true" />
 
     <Button

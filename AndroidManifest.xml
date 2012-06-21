@@ -39,6 +39,9 @@
         <activity
             android:name=".LogoutActivity"
             android:theme="@android:style/Theme.Dialog" />
+        <activity
+            android:name=".AddProductDialogActivity"
+            android:theme="@android:style/Theme.Dialog" />
     </application>
 
 </manifest>

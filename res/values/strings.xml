@@ -4,9 +4,13 @@
     <string name="hello">Hello World, RestaurantAppActivity!</string>
     <string name="app_name">My Restaurant</string>
     <string name="account_log_in">Log into your Restaurant account: </string>
+    <string name="btn_add">Add</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_delete">Delete</string>
     <string name="btn_finish">Finish</string>
     <string name="btn_log_in">Log In</string>
     <string name="btn_log_out">Log Out</string>
+    <string name="btn_payment">Payment</string>
     <string name="btn_refresh">Refresh</string>
     <string name="currency_ron">RON</string>
     <string name="descr_banner">My Restaurant</string>
@@ -14,15 +18,20 @@
     <string name="descr_refresh_icon">Refresh icon</string>
     <string name="descr_product_icon">Product icon</string>
     <string name="hint_email_address">Email Address</string>
+    <string name="hint_extra_info">Extra Info</string>
     <string name="hint_password">Password</string>
     <string name="hint_filter_menu">Filter Menu</string>
+    <string name="label_extra_info">Extra information?</string>
     <string name="label_logging_out">Logging out will clear your username and password from this phone.</string>
+    <string name="label_product_name">Product name: </string>
     <string name="msg_empty_menu"></string>
     <string name="msg_invalid_credentials">CARFAX did not recognize this email and password. Please try again</string>
     <string name="msg_network_error">Whoops! Couldn\'t connect at this time. Please try again.</string>
     <string name="msg_service_unavailable">We\'re sorry, this Restaurant service is temporarily unavailable. Please try again.</string>
     <string name="progress_requesting">Requesting. Please wait… </string>
     <string name="random_long_string">Very Looooooooooooooooooooooooong Product Name</string>
+    <string name="random_value">2104</string>
+    <string name="status_ordered">ordered</string>
     <string name="table_1">1</string>
     <string name="table_2">2</string>
     <string name="table_3">3</string>
@@ -32,6 +41,7 @@
     <string name="table_7">7</string>
     <string name="table_8">8</string>
     <string name="table_9">9</string>
+    <string name="title_bill">Bill Total:</string>
     <string name="title_menu">Choose menu items</string>
     <string name="title_tables">Tables</string>
 

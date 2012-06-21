@@ -3,6 +3,7 @@ package ro.gdg.android.api;
 import ro.gdg.android.Settings;
 import ro.gdg.android.db.TableBillsHistory;
 import ro.gdg.android.domain.MenuResponse;
+import ro.gdg.android.domain.Product;
 import ro.gdg.android.domain.TableBill;
 import ro.gdg.android.domain.TableBillsResponse;
 import ro.gdg.android.domain.UserLogin;
@@ -183,9 +184,9 @@ public class RestaurantServiceClient {
 		return response;
 	}
 
-	public synchronized void addTableBillToHistory(String waiter,
+	public synchronized long addTableBillToHistory(String waiter,
 			int tableNumber) {
-		tableBillsHistory.addTableBill(waiter, tableNumber,
+		return tableBillsHistory.addTableBill(waiter, tableNumber,
 				TableBill.STATUS_OPEN);
 	}
 
@@ -249,5 +250,19 @@ public class RestaurantServiceClient {
 
 	public boolean isMenuSyncInProgress() {
 		return menuTask != null;
+	}
+
+	public Product getProductById(long id) {
+		return tableBillsHistory.getProductById(id);
+	}
+
+	public String getProductNameById(long id) {
+		return tableBillsHistory.getProductNameById(id);
+	}
+
+	public synchronized long addOrderedProductToDB(long tableBillId,
+			long productId, int stateId, String extraInfo) {
+		return tableBillsHistory.addOrderedProduct(tableBillId, productId,
+				stateId, extraInfo);
 	}
 }
