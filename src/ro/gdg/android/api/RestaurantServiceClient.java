@@ -14,6 +14,7 @@ import ro.gdg.android.net.SyncMenuTask;
 import ro.gdg.android.net.TableBillsHistoryUpdateListener;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -255,6 +256,10 @@ public class RestaurantServiceClient {
 	public Product getProductById(long id) {
 		return tableBillsHistory.getProductById(id);
 	}
+	
+	public int getProductPriceById(long id) {
+		return tableBillsHistory.getProductPriceById(id);
+	}
 
 	public String getProductNameById(long id) {
 		return tableBillsHistory.getProductNameById(id);
@@ -264,5 +269,9 @@ public class RestaurantServiceClient {
 			long productId, int stateId, String extraInfo) {
 		return tableBillsHistory.addOrderedProduct(tableBillId, productId,
 				stateId, extraInfo);
+	}
+	
+	public Cursor getOrderedProductsOfBill(long tableBillId){
+		return tableBillsHistory.getOrderedProductsOfBill(tableBillId);
 	}
 }

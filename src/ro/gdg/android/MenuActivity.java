@@ -1,13 +1,9 @@
 package ro.gdg.android;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import ro.gdg.android.api.RestaurantServiceClient;
-import ro.gdg.android.db.TableBillsHistory.TableBillBC;
 import ro.gdg.android.domain.OrderedProduct;
-import ro.gdg.android.domain.TableBill;
 import ro.gdg.android.ui.adapter.AbstractCheckableTreeAdapter.SelectionListener;
 import ro.gdg.android.ui.adapter.ProductTreeAdapter;
 import android.app.Activity;
@@ -93,6 +89,8 @@ public class MenuActivity extends ExpandableListActivity implements
 				Log.d(TAG, "extra info added: " + extraInfo);
 				if (extraInfo != null) {
 					orderedProduct.setExtraInfo(extraInfo);
+				} else {
+					orderedProduct.setExtraInfo("");
 				}
 				orderedProducts.add(orderedProduct);
 
@@ -143,20 +141,23 @@ public class MenuActivity extends ExpandableListActivity implements
 		// add to db
 		long tableId = serviceClient.addTableBillToHistory(serviceClient
 				.getUserLogin().getAccountEmail(), tableNo);
+		int total = 0;
 		for (OrderedProduct orProduct : orderedProducts) {
 			orProduct.setTableBillId(tableId);
 			serviceClient.addOrderedProductToDB(tableId,
 					orProduct.getProductId(), orProduct.getStateId(),
 					orProduct.getExtraInfo());
+			total = total
+					+ serviceClient.getProductPriceById(orProduct
+							.getProductId());
 		}
 
 		// send request to server
 
 		// go to bill
-	}
-
-	private String formatCurrentDate() {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		return formatter.format(new Date(System.currentTimeMillis()));
+		Intent intent = new Intent(this, TableBillActivity.class);
+		intent.putExtra(TableBillActivity.EXTRA_TABLE_BILL_ID, tableId);
+		intent.putExtra(TableBillActivity.EXTRA_TOTAL, total);
+		startActivity(intent);
 	}
 }

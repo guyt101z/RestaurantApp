@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 
 import ro.gdg.android.TablesActivity;
 import ro.gdg.android.domain.Category;
+import ro.gdg.android.domain.OrderedProduct;
+import ro.gdg.android.domain.OrderedProductExtended;
 import ro.gdg.android.domain.Product;
 import ro.gdg.android.domain.TableBill;
 import android.content.ContentValues;
@@ -198,6 +200,24 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 			return productOrdered;
 
 		}
+
+		public static OrderedProductExtended readProductOrderedExtended(
+				Cursor cursor, TableBillsHistory db) {
+			OrderedProductExtended orderedProductExtended = new OrderedProductExtended();
+			orderedProductExtended
+					.setProductName(db.getProductNameById(cursor.getLong(cursor
+							.getColumnIndex(ProductOrderedBC.PRODUCT_ID))));
+			orderedProductExtended
+					.setStatus(cursor.getLong(cursor
+							.getColumnIndex(ProductOrderedBC.STATE_ID)) == OrderedProduct.STATUS_ORDERED ? "ordered"
+							: "ready");
+			String extra = cursor.getString(cursor
+					.getColumnIndex(ProductOrderedBC.EXTRA_INFO));
+			Log.i(TAG, "readProductOrderedExtended extra=" + extra + "|");
+			orderedProductExtended.setExtraInfo(extra == null ? "" : extra);
+			return orderedProductExtended;
+
+		}
 	}
 
 	public TableBillsHistory(Context context) {
@@ -291,8 +311,10 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		int count = db.delete(TableBillBC.TABLE, "1", null);
 		Log.i(TAG, "deleteAllTableBills count:" + count);
+		int count2 = db.delete(ProductOrderedBC.TABLE, "1", null);
+		Log.i(TAG, "deleteAllTableBills count:" + count2);
 
-		notifyChanges(count);
+		notifyChanges(count + count2);
 		return count;
 	}
 
@@ -301,6 +323,8 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		int count = db.delete(TableBillBC.TABLE, "1", null);
 		Log.i(TAG, "replaceAllTableBills count:" + count);
+		int count2 = db.delete(ProductOrderedBC.TABLE, "1", null);
+		Log.i(TAG, "replaceAllTableBills count2:" + count2);
 
 		long noOfRecords = 0;
 		ContentValues values = new ContentValues();
@@ -475,6 +499,19 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		return null;
 	}
 
+	public int getProductPriceById(long id) {
+		Log.d(TAG, "getProductPriceById id=" + id);
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		Cursor cursor = db.rawQuery("SELECT * " + "FROM product "
+				+ "WHERE product._id = ? ", new String[] { id + "" });
+
+		if (cursor.moveToFirst()) {
+			return cursor.getInt(cursor.getColumnIndex(ProductBC.PRICE));
+		}
+		return 0;
+	}
+
 	public String getProductNameById(long id) {
 		Log.d(TAG, "getProductNameById id=" + id);
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -571,6 +608,16 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 
 		notifyChanges(count);
 		return id;
+	}
+
+	public Cursor getOrderedProductsOfBill(long tableBillId) {
+		Log.d(TAG, "getOrderedProductsOfBill tableBillId=" + tableBillId);
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery("SELECT * " + "FROM product_ordered "
+				+ "WHERE table_bill_id=?", new String[] { tableBillId + "" });
+
+		Log.d(TAG, "getOrderedProductsOfBill count=" + cursor.getCount());
+		return cursor;
 	}
 
 	// ======================= Other =====================================
