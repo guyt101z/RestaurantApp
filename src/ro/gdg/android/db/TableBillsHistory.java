@@ -366,8 +366,24 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 				Log.e("", "Parse exception: ", e);
 			}
 			values.put(TableBillBC.STATUS, billsList[i].getStatus());
-			if (db.insert(TableBillBC.TABLE, null, values) != -1) {
+			long tableBillId = db.insert(TableBillBC.TABLE, null, values);
+			if (tableBillId != -1) {
 				noOfRecords++;
+
+				if (billsList[i].getProducts() != null) { // my table bill
+					values = new ContentValues();
+					for (OrderedProduct orderedProduct : billsList[i]
+							.getProducts()) {
+						values.put(ProductOrderedBC.TABLE_BILL_ID, tableBillId);
+						values.put(ProductOrderedBC.PRODUCT_ID,
+								orderedProduct.getProductId());
+						values.put(ProductOrderedBC.STATE_ID,
+								orderedProduct.getStateId());
+						values.put(ProductOrderedBC.EXTRA_INFO,
+								orderedProduct.getExtraInfo());
+						db.insert(ProductOrderedBC.TABLE, null, values);
+					}
+				}
 			}
 		}
 		Log.i(TAG, "replaceAllTableBills added bills count:" + noOfRecords);
@@ -681,6 +697,7 @@ public class TableBillsHistory extends SQLiteOpenHelper {
 		int count = db.delete(ProductOrderedBC.TABLE, ProductOrderedBC._ID
 				+ "=?", new String[] { id + "" });
 		Log.i(TAG, "deleteOrderedProduct count deleted products:" + count);
+		notifyChanges(count);
 	}
 
 	// ======================= Other =====================================

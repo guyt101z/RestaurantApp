@@ -15,8 +15,8 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@id/title"
         android:layout_marginBottom="20dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="40dp"
         android:text="@string/account_log_in"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -28,8 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/loginTitle"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:hint="@string/hint_email_address"
         android:inputType="textEmailAddress" />
 
@@ -38,8 +38,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/loginUser"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:hint="@string/hint_password"
         android:password="true" />
 
@@ -49,8 +49,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/loginPassword"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/btn_blue_selector"
         android:enabled="false"

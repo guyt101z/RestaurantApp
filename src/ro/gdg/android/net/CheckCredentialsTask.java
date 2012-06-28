@@ -33,7 +33,7 @@ public class CheckCredentialsTask extends
 		if (!userLogin.getAccountEmail().equalsIgnoreCase(
 				serviceClient.getSettings().getEmail())) {
 			Log.d(TAG, "new user => delete history");
-			// serviceClient.getReportsHistory().deleteAllRecords();
+			serviceClient.getTableBillsHistory().deleteAllTableBills();
 		}
 
 		return serviceClient.getRestServiceClient().checkCredentials(

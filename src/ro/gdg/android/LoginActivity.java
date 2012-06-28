@@ -144,7 +144,6 @@ public class LoginActivity extends Activity implements CheckCredentialsListener 
 		Intent intent = new Intent(this, TablesActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
-		finish();
 	}
 
 	static class EnableIfLengthWatcher implements TextWatcher {

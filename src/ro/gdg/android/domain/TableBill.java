@@ -1,5 +1,7 @@
 package ro.gdg.android.domain;
 
+import java.util.Arrays;
+
 public class TableBill {
 	public static final int STATUS_OPEN = 0;
 	public static final int STATUS_CLOSED = 1;
@@ -8,6 +10,7 @@ public class TableBill {
 	private int tableNumber;
 	private String date;
 	private int status;
+	private OrderedProduct[] products;
 
 	public TableBill(String waiterEmail, int tableNumber, String date,
 			int status) {
@@ -50,10 +53,19 @@ public class TableBill {
 		this.status = status;
 	}
 
+	public OrderedProduct[] getProducts() {
+		return products;
+	}
+
+	public void setProducts(OrderedProduct[] products) {
+		this.products = products;
+	}
+
 	@Override
 	public String toString() {
-		return "TBill [waiterEmail=" + waiterEmail + ", tableNumber="
-				+ tableNumber + ", date=" + date + ", status=" + status + "]";
+		return "TableBill [waiterEmail=" + waiterEmail + ", tableNumber="
+				+ tableNumber + ", date=" + date + ", status=" + status
+				+ ", products=" + Arrays.toString(products) + "]";
 	}
 
 }

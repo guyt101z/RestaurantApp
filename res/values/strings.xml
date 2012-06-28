@@ -3,7 +3,7 @@
 
     <string name="hello">Hello World, RestaurantAppActivity!</string>
     <string name="app_name">My Restaurant</string>
-    <string name="account_log_in">Log into your Restaurant account: </string>
+    <string name="account_log_in">Log into your account: </string>
     <string name="btn_add">Add</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_delete">Delete</string>
@@ -26,7 +26,7 @@
     <string name="label_logging_out">Logging out will clear your username and password from this phone.</string>
     <string name="label_product_name">Product name: </string>
     <string name="msg_empty_menu"></string>
-    <string name="msg_invalid_credentials">CARFAX did not recognize this email and password. Please try again</string>
+    <string name="msg_invalid_credentials">G1-OMS did not recognize this email and password for use of mobile app. Please try again</string>
     <string name="msg_network_error">Whoops! Couldn\'t connect at this time. Please try again.</string>
     <string name="msg_service_unavailable">We\'re sorry, this Restaurant service is temporarily unavailable. Please try again.</string>
     <string name="progress_requesting">Requesting. Please wait… </string>
