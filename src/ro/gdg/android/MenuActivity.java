@@ -32,6 +32,7 @@ public class MenuActivity extends ExpandableListActivity implements
 	RestaurantServiceClient serviceClient;
 	OrderedProduct orderedProduct;
 	int tableNo;
+	long billId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class MenuActivity extends ExpandableListActivity implements
 
 		Intent intent = getIntent();
 		tableNo = intent.getIntExtra(TablesActivity.TABLE_NO_EXTRA, 0);
+		billId = intent.getLongExtra(TableBillActivity.EXTRA_TABLE_BILL_ID, -1);
 
 		filterText = (EditText) this.findViewById(R.id.filterText);
 		finishButton = (Button) this.findViewById(R.id.action_bar_finish);
@@ -138,26 +140,36 @@ public class MenuActivity extends ExpandableListActivity implements
 
 	public void finish(View view) {
 		Log.d(TAG, "finish orderedProducts count = " + orderedProducts.size());
-		// add to db
-		long tableId = serviceClient.addTableBillToHistory(serviceClient
-				.getUserLogin().getAccountEmail(), tableNo);
-		int total = 0;
+
+		if (billId == -1) { // new table bill
+			// add to db
+			long tableBillId = serviceClient.addTableBillToHistory(
+					serviceClient.getUserLogin().getAccountEmail(), tableNo);
+
+			addOrderedProducts(tableBillId);
+
+			// go to bill
+			Intent intent = new Intent(this, TableBillActivity.class);
+			intent.putExtra(TableBillActivity.EXTRA_TABLE_BILL_ID, tableBillId);
+			startActivity(intent);
+		} else {
+			addOrderedProducts(billId);
+
+			// go back to bill
+			Intent intent = new Intent();
+			setResult(RESULT_OK, intent);
+		}
+		// remove from activity stack
+		finish();
+
+	}
+
+	public void addOrderedProducts(long tableBillId) {
 		for (OrderedProduct orProduct : orderedProducts) {
-			orProduct.setTableBillId(tableId);
-			serviceClient.addOrderedProductToDB(tableId,
+			orProduct.setTableBillId(tableBillId);
+			serviceClient.addOrderedProductToDB(tableBillId,
 					orProduct.getProductId(), orProduct.getStateId(),
 					orProduct.getExtraInfo());
-			total = total
-					+ serviceClient.getProductPriceById(orProduct
-							.getProductId());
 		}
-
-		// send request to server
-
-		// go to bill
-		Intent intent = new Intent(this, TableBillActivity.class);
-		intent.putExtra(TableBillActivity.EXTRA_TABLE_BILL_ID, tableId);
-		intent.putExtra(TableBillActivity.EXTRA_TOTAL, total);
-		startActivity(intent);
 	}
 }

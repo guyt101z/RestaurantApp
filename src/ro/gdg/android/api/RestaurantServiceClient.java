@@ -24,7 +24,7 @@ public class RestaurantServiceClient {
 			.getSimpleName();
 
 	private static final String LAST_BILLS_RECEIVED_TIME = "last_bills_received_time";
-	public static final long REQUEST_TIME_INTERVAL = 30000L;
+	public static final long REQUEST_TIME_INTERVAL = 300000L; // 30000L
 
 	private TableBillsHistory tableBillsHistory;
 	private RestServiceClient restServiceClient;
@@ -200,6 +200,10 @@ public class RestaurantServiceClient {
 		return tableBillsHistory.hasOpenBill(tableNo);
 	}
 
+	public long tableBillIdAfterTable(int tableNo) {
+		return tableBillsHistory.tableBillIdAfterTable(tableNo);
+	}
+
 	// ======================= Menu =====================================
 
 	public void setMenuListener(MenuUpdateListener listener) {
@@ -256,7 +260,7 @@ public class RestaurantServiceClient {
 	public Product getProductById(long id) {
 		return tableBillsHistory.getProductById(id);
 	}
-	
+
 	public int getProductPriceById(long id) {
 		return tableBillsHistory.getProductPriceById(id);
 	}
@@ -270,8 +274,24 @@ public class RestaurantServiceClient {
 		return tableBillsHistory.addOrderedProduct(tableBillId, productId,
 				stateId, extraInfo);
 	}
-	
-	public Cursor getOrderedProductsOfBill(long tableBillId){
+
+	public Cursor getOrderedProductsOfBill(long tableBillId) {
 		return tableBillsHistory.getOrderedProductsOfBill(tableBillId);
+	}
+
+	public int getOrderedProductsTotalOfBill(long tableBillId) {
+		return tableBillsHistory.getOrderedProductsTotalOfBill(tableBillId);
+	}
+
+	public void deleteTableBill(long tableBillId) {
+		tableBillsHistory.deleteTableBill(tableBillId);
+	}
+
+	public void closeTableBill(long id) {
+		tableBillsHistory.closeTableBill(id);
+	}
+
+	public void deleteOrderedProduct(long id) {
+		tableBillsHistory.deleteOrderedProduct(id);
 	}
 }
