@@ -130,7 +130,6 @@ public class TablesActivity extends Activity implements
 		}
 		
 		long tableBillID = serviceClient.tableBillIdAfterTable(tableNo);
-//		if (serviceClient.hasOpenBill(tableNo)) {
 		if (tableBillID != -1){
 			i = new Intent(this, TableBillActivity.class);
 			i.putExtra(TableBillActivity.EXTRA_TABLE_BILL_ID, tableBillID);

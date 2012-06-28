@@ -7,7 +7,7 @@ import ro.gdg.android.net.CheckCredentialsListener;
 import ro.gdg.android.net.CheckCredentialsTask;
 import ro.gdg.android.ui.adapter.OrderedProductsListAdapter;
 import ro.gdg.android.util.ErrorHandler;
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -81,27 +81,29 @@ public class TableBillActivity extends ListActivity implements
 	protected boolean onLongListItemClick(View v, int pos, long id) {
 		Log.i(TAG, "onLongListItemClick id = " + id);
 		selectedProduct = id;
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Are you sure you want to delete it from the order?")
-				.setCancelable(false)
-				.setPositiveButton("Yes",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								// delete product
-								serviceClient
-										.deleteOrderedProduct(selectedProduct);
-								listAdapter.notifyDataSetChanged();
-
-								// update total
-								refreshTotal();
-							}
-						})
-				.setNegativeButton("No", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
-					}
-				}).create().show();
+		Intent intent = new Intent(this, DeleteBillDialogActivity.class);
+		startActivityForResult(intent, DIALOG_DELETE);
 		return true;
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case DIALOG_DELETE:
+			if (resultCode == Activity.RESULT_OK) {
+				// delete product
+				serviceClient.deleteOrderedProduct(selectedProduct);
+				Cursor cursor = serviceClient.getOrderedProductsOfBill(tableBillID);
+				listAdapter.changeCursor(cursor);
+
+				// update total
+				refreshTotal();
+			}
+			break;
+		default:
+			break;
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	@Override
